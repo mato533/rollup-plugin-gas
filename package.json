@@ -1,0 +1,19 @@
+{
+  "name": "rollup-plugin-gas",
+  "version": "1.0.0",
+  "description": "Rollup plugin for Google Apps Script.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mato533/rollup-plugin-gas.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mato533/rollup-plugin-gas/issues"
+  },
+  "homepage": "https://github.com/mato533/rollup-plugin-gas#readme"
+}
