@@ -15,5 +15,14 @@
   "bugs": {
     "url": "https://github.com/mato533/rollup-plugin-gas/issues"
   },
-  "homepage": "https://github.com/mato533/rollup-plugin-gas#readme"
+  "homepage": "https://github.com/mato533/rollup-plugin-gas#readme",
+  "devDependencies": {
+    "fs": "^0.0.1-security",
+    "rollup": "^3.23.0",
+    "typescript": "^5.0.4",
+    "vitest": "^0.31.2"
+  },
+  "dependencies": {
+    "gas-entry-generator": "^2.5.1"
+  }
 }
