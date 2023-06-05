@@ -24,10 +24,13 @@ const rollupPluginGas = (options?: PluginOption): Plugin => {
     transform(code) {
       const gasCode = generate(code, configratedOptions);
       if (gasCode.entryPointFunctions) {
-        const codes = String(gasCode.entryPointFunctions).replace(/\n/g, "");
-        codes.split("}").forEach((code) => {
+        const codes = String(gasCode.entryPointFunctions).replace(
+          /{\n}/g,
+          "{};"
+        );
+        codes.split("\n").forEach((code) => {
           if (code) {
-            entryPointFunctions.push(`${code}};`);
+            entryPointFunctions.push(`${code}`);
           }
         });
       }
