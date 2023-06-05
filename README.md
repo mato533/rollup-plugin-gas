@@ -1,4 +1,5 @@
 # rollup-plugin-gas
+
 ## About
 
 ## Example
@@ -8,9 +9,9 @@
 ## Usage
 
 ## Note
+
 - Some rollup options are overridden in plugins.
 
-| option | value |
-----|---- 
-| treeshake | false |
-| output.format | umd |
+| option        | value |
+| ------------- | ----- |
+| output.format | umd   |
