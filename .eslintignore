@@ -1,1 +1,1 @@
-test/fixtures/*.bundle.js
+tests/fixtures/**/*.bundle.js
