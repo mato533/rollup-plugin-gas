@@ -18,6 +18,7 @@ describe("rollup-plugin-gas", () => {
       });
 
       const output = await bundle.generate({});
+      expect(output.output.length).toBe(1);
       const [{ code }] = output.output;
       const expected = fs.readFileSync(outputFile, {
         encoding: "utf8",
