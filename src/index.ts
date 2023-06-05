@@ -13,10 +13,6 @@ const rollupPluginGas = (options?: PluginOption): Plugin => {
   const entryPointFunctions: Array<string> = [];
   return {
     name: "rollup-plugin-gas",
-    options(options) {
-      options.treeshake = false;
-      return options;
-    },
     outputOptions(options) {
       options.format = "umd"; // cjs
       return options;
