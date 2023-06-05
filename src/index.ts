@@ -1,33 +1,34 @@
 import { type Plugin } from "rollup";
+import { createFilter } from "rollup-pluginutils";
 import { generate } from "gas-entry-generator";
 
 const defaultOptions = {
   comment: false,
-  autoGlobalExports: false,
-  exportsIdentifierName: "exports",
-  globalIdentifierName: "global",
+  include: ["**/*"],
 };
 
 const rollupPluginGas = (options?: PluginOption): Plugin => {
   const configratedOptions = Object.assign({}, defaultOptions, options);
   const entryPointFunctions: Array<string> = [];
+  const filter = createFilter(configratedOptions.include);
   return {
     name: "rollup-plugin-gas",
     outputOptions(options) {
       options.format = "umd"; // cjs
       return options;
     },
-    transform(code) {
-      const gasCode = generate(code, configratedOptions);
+    transform(code, id) {
+      if (!filter(id)) {
+        return;
+      }
+      const gasCode = generate(code, { comment: configratedOptions.comment });
       if (gasCode.entryPointFunctions) {
         const codes = String(gasCode.entryPointFunctions).replace(
           /{\n}/g,
           "{};"
         );
         codes.split("\n").forEach((code) => {
-          if (code) {
-            entryPointFunctions.push(`${code}`);
-          }
+          code && entryPointFunctions.push(`${code}`);
         });
       }
     },
