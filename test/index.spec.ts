@@ -30,4 +30,19 @@ describe("rollup-plugin-gas", () => {
       expect(code).toBe(expected);
     }
   );
+  it("shold included comments", async () => {
+    const { inputFile, outputFile } = defineFixtureFileName("comment");
+    const bundle = await rollup({
+      input: inputFile,
+      plugins: [rollupPluginGas({ comment: true })],
+    });
+
+    const output = await bundle.generate({});
+    expect(output.output.length).toBe(1);
+    const [{ code }] = output.output;
+    const expected = fs.readFileSync(outputFile, {
+      encoding: "utf8",
+    });
+    expect(code).toBe(expected);
+  });
 });
