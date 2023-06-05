@@ -30,6 +30,7 @@
     "vitest": "^0.31.2"
   },
   "dependencies": {
-    "gas-entry-generator": "^2.5.1"
+    "gas-entry-generator": "^2.5.1",
+    "rollup-pluginutils": "^2.8.2"
   }
 }
