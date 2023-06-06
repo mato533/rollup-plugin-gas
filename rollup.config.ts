@@ -25,7 +25,6 @@ const emitModulePackageFile = (): Plugin => {
   };
 };
 const defineConfig = (pkg: Record<string, any>) => {
-  console.log(Object.keys(pkg.dependencies || {}));
   return {
     input: "src/index.ts",
     external: Object.keys(pkg.dependencies || {}).concat(
