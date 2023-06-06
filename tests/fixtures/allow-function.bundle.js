@@ -6,6 +6,9 @@ function basic() {};
   factory();
 })((function () { 'use strict';
 
+  /*!*************************!*\
+    !*** allow-function.js ***!
+  \*!*************************!*/
   global.basic = () => {
     console.log("test");
   };

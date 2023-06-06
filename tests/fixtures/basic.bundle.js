@@ -9,10 +9,16 @@ function minus() {};
   factory();
 })((function () { 'use strict';
 
+  /*!***************!*\
+    !*** echo.js ***!
+  \*!***************!*/
   const echo = (message) => {
     return message;
   };
 
+  /*!****************!*\
+    !*** basic.js ***!
+  \*!****************!*/
   /**
    * Return write arguments.
    */
