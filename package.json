@@ -2,9 +2,17 @@
   "name": "rollup-plugin-gas",
   "version": "1.0.0",
   "description": "Rollup plugin for Google Apps Script.",
-  "main": "index.js",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/es/index.js",
+  "exports": {
+    "types": "./src/@types/index.d.ts",
+    "import": "./dist/es/index.js",
+    "default": "./dist/cjs/index.js"
+  },
+  "types": "./src/@types/index.d.ts",
   "type": "module",
   "scripts": {
+    "build": "rollup --config rollup.config.ts --configPlugin typescript",
     "test": "vitest --run",
     "coverage": "vitest run --coverage"
   },
@@ -46,5 +54,17 @@
   "dependencies": {
     "gas-entry-generator": "^2.5.1",
     "rollup-pluginutils": "^2.8.2"
-  }
+  },
+  "files": [
+    "dist",
+    "!dist/**/*.map",
+    "src/@types",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "rollup",
+    "plugin",
+    "google-apps-scripts"
+  ]
 }
