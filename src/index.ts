@@ -1,4 +1,5 @@
-import { type Plugin } from "rollup";
+import type { Plugin } from "rollup";
+import type { RollupPluginGasOption } from "types";
 import { createFilter } from "rollup-pluginutils";
 import { generate } from "gas-entry-generator";
 
@@ -7,7 +8,7 @@ const defaultOptions = {
   include: ["**/*"],
 };
 
-const rollupPluginGas = (options?: PluginOption): Plugin => {
+const rollupPluginGas = (options?: RollupPluginGasOption): Plugin => {
   const configratedOptions = Object.assign({}, defaultOptions, options);
   const entryPointFunctions: Array<string> = [];
   const filter = createFilter(configratedOptions.include);
