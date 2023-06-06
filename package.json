@@ -5,11 +5,11 @@
   "main": "./dist/cjs/index.js",
   "module": "./dist/es/index.js",
   "exports": {
-    "types": "./src/@types/index.d.ts",
+    "types": "./types/index.d.ts",
     "import": "./dist/es/index.js",
     "default": "./dist/cjs/index.js"
   },
-  "types": "./src/@types/index.d.ts",
+  "types": "./types/index.d.ts",
   "type": "module",
   "scripts": {
     "build": "rollup --config rollup.config.ts --configPlugin typescript",
@@ -58,7 +58,7 @@
   "files": [
     "dist",
     "!dist/**/*.map",
-    "src/@types",
+    "types/index.d.ts",
     "README.md",
     "LICENSE"
   ],
