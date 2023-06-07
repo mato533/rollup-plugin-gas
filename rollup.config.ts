@@ -1,4 +1,5 @@
 import typescript from "@rollup/plugin-typescript";
+import { builtinModules } from "module";
 import { readFileSync } from "fs";
 import { Plugin, WarningHandlerWithDefault } from "rollup";
 
@@ -27,9 +28,9 @@ const emitModulePackageFile = (): Plugin => {
 const defineConfig = (pkg: Record<string, any>) => {
   return {
     input: "src/index.ts",
-    external: Object.keys(pkg.dependencies || {}).concat(
-      Object.keys(pkg.peerDependencies || {})
-    ),
+    external: Object.keys(pkg.dependencies || {})
+      .concat(Object.keys(pkg.peerDependencies || {}))
+      .concat(builtinModules),
     onwarn,
     strictDeprecations: true,
     output: [
