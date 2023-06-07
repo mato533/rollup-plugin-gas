@@ -1,1 +1,4 @@
 tests/fixtures/**/*.bundle.js
+dist
+.vscode
+coverage

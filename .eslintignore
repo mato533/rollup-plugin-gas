@@ -1,1 +1,2 @@
 tests/fixtures/**/*.bundle.js
+dist
