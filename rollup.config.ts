@@ -1,5 +1,4 @@
 import typescript from "@rollup/plugin-typescript";
-import builtins from "rollup-plugin-node-builtins";
 import { readFileSync } from "fs";
 import { Plugin, WarningHandlerWithDefault } from "rollup";
 
@@ -48,7 +47,7 @@ const defineConfig = (pkg: Record<string, any>) => {
         sourcemap: true,
       },
     ],
-    plugins: [typescript({ sourceMap: true }), builtins()],
+    plugins: [typescript({ sourceMap: true })],
   };
 };
 
