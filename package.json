@@ -10,7 +10,6 @@
     "default": "./dist/cjs/index.js"
   },
   "types": "./types/index.d.ts",
-  "type": "module",
   "scripts": {
     "build": "rollup --config rollup.config.ts --configPlugin typescript",
     "test": "vitest --run",
