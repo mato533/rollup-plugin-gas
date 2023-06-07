@@ -1,5 +1,8 @@
 # rollup-plugin-gas
 
+[![codecov](https://codecov.io/gh/mato533/rollup-plugin-gas/branch/main/graph/badge.svg?token=50Z04K2PVN)](https://codecov.io/gh/mato533/rollup-plugin-gas)
+[![license](https://img.shields.io/npm/l/rollup.svg)](https://github.com/rollup/rollup/blob/master/LICENSE.md)
+
 ## About
 
 Rollup plugin for Google Apps Script.
