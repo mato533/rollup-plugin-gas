@@ -1,8 +1,8 @@
 import path from "path";
 import fs from "fs";
 import { rollup } from "rollup";
-import rollupPluginGas from "@/index";
-import { describe, it } from "vitest";
+import { describe, expect, it } from "vitest";
+import rollupPluginGas from "../src";
 
 const dirFixtures = path.resolve(__dirname, "./fixtures");
 const dirIncludeFixtures = path.resolve(__dirname, "./fixtures/include");

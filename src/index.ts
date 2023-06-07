@@ -1,8 +1,8 @@
 import type { Plugin } from "rollup";
-import type { RollupPluginGasOption } from "types";
+import type { RollupPluginGasOption } from "../types";
 import { createFilter } from "rollup-pluginutils";
 import { generate } from "gas-entry-generator";
-import path from "path";
+import { basename } from "path";
 
 const defaultOptions = {
   comment: false,
@@ -10,7 +10,7 @@ const defaultOptions = {
 };
 
 const generateChunckHeader = (code: string, id: string) => {
-  const filename = path.basename(id);
+  const filename = basename(id);
   const title = `  !*** ${filename} ***!`;
   const ast = Array(filename.length).fill("*");
   const header = "/*!****" + ast.join("") + "****!*\\";
