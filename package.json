@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-google-apps-script",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Rollup plugin for Google Apps Script.",
   "main": "./dist/cjs/index.js",
   "module": "./dist/es/index.js",
