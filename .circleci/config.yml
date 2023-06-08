@@ -4,22 +4,73 @@ version: 2.1
 # Orbs are reusable packages of CircleCI configuration that you may share across projects, enabling you to create encapsulated, parameterized commands, jobs, and executors that can be used across multiple projects.
 # See: https://circleci.com/docs/orb-intro/
 orbs:
-  node: circleci/node@4.7
+  node: circleci/node@5.1.0
   codecov: codecov/codecov@3.2.5
+
+jobs:
+  test_and_build:
+    executor: node/default
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+      - run:
+          command: yarn test
+          name: Run tests
+      - run:
+          command: yarn test:ts
+          name: Run tests for Typescript
+      - run:
+          command: yarn build
+          name: Build app
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - ./
+  coverage:
+    executor: node/default
+    steps:
+      - run:
+          command: yarn coverage
+          name: Run coverage
+      - codecov/upload:
+          file: ./coverage/coverage-final.json
+  deploy:
+    executor: node/default
+    steps:
+      - run:
+          name: Publish to NPM
+          command: |
+            npm set //registry.npmjs.org/:_authToken=$NPM_TOKEN
+            npm publish
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/configuration-reference/#workflows
 workflows:
-  main: # This is the name of the workflow, feel free to change it to better match your workflow.
+  test: # This is the name of the workflow, feel free to change it to better match your workflow.
     # Inside the workflow, you define the jobs you want to run.
     jobs:
-      - node/test:
-          # This is the node version to use for the `cimg/node` tag
-          # Relevant tags can be found on the CircleCI Developer Hub
-          # https://circleci.com/developer/images/image/cimg/node
-          version: "16.10"
-          # If you are using yarn, change the line below from "npm" to "yarn"
-          pkg-manager: yarn
-          post-steps:
-            - codecov/upload:
-              file: ./coverage/coverage-final.json
+      - test_and_build
+
+  test_and_deploy:
+    jobs:
+      - test_and_build:
+          filters:
+            branches:
+              only: main
+      - coverage:
+          requires:
+            - test_and_build
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+      - deploy:
+          requires:
+            - test_and_build
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
