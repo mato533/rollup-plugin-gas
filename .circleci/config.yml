@@ -47,12 +47,22 @@ jobs:
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/configuration-reference/#workflows
 workflows:
+  test: # This is the name of the workflow, feel free to change it to better match your workflow.
+    # Inside the workflow, you define the jobs you want to run.
+    jobs:
+      - test_and_build
+          filters:
+            branches:
+              only: main
+
   test_and_deploy:
     jobs:
       - test_and_build:
           filters:
+            tags:
+              only: /^v.*/
             branches:
-              only: main
+              ignore: /.*/
       - coverage:
           requires:
             - test_and_build
