@@ -15,7 +15,8 @@
     "format": "prettier --check '**/*.{js,ts,json,md}'",
     "fix": "eslint --fix --ext .js,.ts && prettier --write '**/*.{js,ts,json,md}'",
     "build": "tsc --noEmit && rollup --config rollup.config.ts --configPlugin typescript",
-    "test": "vitest --run --coverage",
+    "test": "vitest --run",
+    "test:ts": "tsc --noEmit",
     "coverage": "vitest run --coverage"
   },
   "repository": {
