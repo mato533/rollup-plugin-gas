@@ -1,5 +1,6 @@
 # rollup-plugin-google-apps-script
 
+[![npm version](https://badge.fury.io/js/rollup-plugin-google-apps-script.svg)](https://badge.fury.io/js/rollup-plugin-google-apps-script)
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/mato533/rollup-plugin-gas/tree/main.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/mato533/rollup-plugin-gas/tree/main)
 [![codecov](https://codecov.io/gh/mato533/rollup-plugin-gas/branch/main/graph/badge.svg?token=50Z04K2PVN)](https://codecov.io/gh/mato533/rollup-plugin-gas)
 [![license](https://img.shields.io/npm/l/rollup.svg)](https://github.com/rollup/rollup/blob/master/LICENSE.md)
