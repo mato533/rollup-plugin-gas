@@ -30,6 +30,8 @@ jobs:
   coverage:
     executor: node/default
     steps:
+      - attach_workspace:
+          at: ~/project
       - run:
           command: yarn coverage
           name: Run coverage
@@ -38,6 +40,8 @@ jobs:
   deploy:
     executor: node/default
     steps:
+      - attach_workspace:
+          at: ~/project
       - run:
           name: Publish to NPM
           command: |
