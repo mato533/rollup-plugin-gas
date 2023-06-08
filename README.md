@@ -20,12 +20,12 @@ Support build using [Vite](https://github.com/vitejs/vite) and [Rollup](https://
 1. NPM
 
    ```sh
-   npm install -D rollup-plugin-gas
+   npm install -D rollup-plugin-google-apps-script
    ```
 
 1. Yarn
    ```sh
-   yarn add -D rollup-plugin-gas
+   yarn add -D rollup-plugin-google-apps-script
    ```
 
 ## Usage
