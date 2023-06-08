@@ -23,7 +23,7 @@
     "type": "git",
     "url": "git+https://github.com/mato533/rollup-plugin-gas.git"
   },
-  "author": "",
+  "author": "Taiki Abe <taiki.abe@ymail.ne.jp>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/mato533/rollup-plugin-gas/issues"
