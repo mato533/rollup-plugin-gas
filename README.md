@@ -1,15 +1,18 @@
-# rollup-plugin-gas
+# rollup-plugin-google-apps-script
 
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/mato533/rollup-plugin-gas/tree/main.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/mato533/rollup-plugin-gas/tree/main)
 [![codecov](https://codecov.io/gh/mato533/rollup-plugin-gas/branch/main/graph/badge.svg?token=50Z04K2PVN)](https://codecov.io/gh/mato533/rollup-plugin-gas)
 [![license](https://img.shields.io/npm/l/rollup.svg)](https://github.com/rollup/rollup/blob/master/LICENSE.md)
 
 ## About
 
 Rollup plugin for Google Apps Script.
+This plugin supports local development of applications that run on Google Apps Script.
+Files bundled using this plugin can be deployed to Google Apps Script using [clasp](https://github.com/google/clasp).
 
 This is inspired by [gas-webpack-plugin](https://github.com/fossamagna/gas-webpack-plugin).
 
-Support build using [Vite](https://github.com/vitejs/vite).
+Support build using [Vite](https://github.com/vitejs/vite) and [Rollup](https://rollupjs.org/).
 
 ## Installation
 
@@ -46,7 +49,7 @@ You can pass a object of configuration options to rollup-plugin-gas. Allowed val
    import path from "path";
    import { fileURLToPath } from "url";
    import { rollup } from "rollup";
-   import rollupPluginGas from "rollup-plugin-gas";
+   import rollupPluginGas from "rollup-plugin-google-apps-script";
 
    const __dirname = path.dirname(fileURLToPath(import.meta.url));
    const entryPath = path.resolve(__dirname, "./code.js");
@@ -80,7 +83,7 @@ You can pass a object of configuration options to rollup-plugin-gas. Allowed val
    // vite.config.ts
    import { defineConfig } from "vite";
    import typescript from "@rollup/plugin-typescript";
-   import rollupPluginGas from "rollup-plugin-gas";
+   import rollupPluginGas from "rollup-plugin-google-apps-script";
    import path from "path";
 
    export default defineConfig({
