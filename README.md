@@ -11,9 +11,28 @@ Rollup plugin for Google Apps Script.
 This plugin supports local development of applications that run on Google Apps Script.
 Files bundled using this plugin can be deployed to Google Apps Script using [clasp](https://github.com/google/clasp).
 
+Support build using [Vite](https://github.com/vitejs/vite) and [Rollup](https://rollupjs.org/).
+
 This is inspired by [gas-webpack-plugin](https://github.com/fossamagna/gas-webpack-plugin).
 
-Support build using [Vite](https://github.com/vitejs/vite) and [Rollup](https://rollupjs.org/).
+### Detail
+Google Apps Script requires the entry point to be a top-level function declaration in order to be called from `google.script.run` or some triggers. This plugin generates top-level function declaration statements when it encounters a `global` object in a function assignment expression.
+
+### Sample of the source code
+
+    ```js
+    // main.js
+
+    // The plugin will nothing to generate for this function.
+    const sayHello = (target) => {
+      console.log(`Hello ${target}!!`)
+    }
+
+    // The plugin will generate a top-level function declaration for this function.
+    global.greet = () => {
+      sayHello("world")
+    }
+    ```
 
 ## Installation
 
