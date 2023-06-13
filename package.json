@@ -15,6 +15,7 @@
     "format": "prettier --check '**/*.{js,ts,json,md}'",
     "fix": "eslint --fix --ext .js,.ts && prettier --write '**/*.{js,ts,json,md}'",
     "build": "tsc --noEmit && rollup --config rollup.config.ts --configPlugin typescript",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md",
     "test": "vitest --run",
     "test:ts": "tsc --noEmit",
     "coverage": "vitest run --coverage"
