@@ -16,6 +16,7 @@ Support build using [Vite](https://github.com/vitejs/vite) and [Rollup](https://
 This is inspired by [gas-webpack-plugin](https://github.com/fossamagna/gas-webpack-plugin).
 
 ### Detail
+
 Google Apps Script requires the entry point to be a top-level function declaration in order to be called from `google.script.run` or some triggers. This plugin generates top-level function declaration statements when it encounters a `global` object in a function assignment expression.
 
 ### Sample of the source code
@@ -54,7 +55,7 @@ Google Apps Script requires the entry point to be a top-level function declarati
 You can pass a object of configuration options to rollup-plugin-gas. Allowed values are as follows
 | Name | Type | Default | Description |
 -------|------|---------|-------------|
-| comment | `{Boolean}` | `true` | If true then generate a top level function declaration statement with comment. |
+| comment | `{Boolean}` | `false` | If true then generate a top level function declaration statement with comment. |
 | include | `{Array<String>}` | `[**/*]` | Array of path patterns to detect functions to generate top level function definitions. accept glob pattern. |
 
 ## Example
