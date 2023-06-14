@@ -6,9 +6,6 @@ function includeTest() {};
   factory();
 })((function () { 'use strict';
 
-  /*!**************!*\
-    !*** foo.js ***!
-  \*!**************!*/
   global.excludeFunction = () => {
     console.log("excludeFunction");
   };
@@ -16,10 +13,6 @@ function includeTest() {};
   const foo = function () {
     console.log("foo");
   };
-
-  /*!******************!*\
-    !*** include.js ***!
-  \*!******************!*/
 
   global.includeTest = function () {
     console.log("includeTest");

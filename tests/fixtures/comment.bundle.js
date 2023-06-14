@@ -13,16 +13,10 @@ function foo(message) {};
   factory();
 })((function () { 'use strict';
 
-  /*!***************!*\
-    !*** echo.js ***!
-  \*!***************!*/
   const echo = (message) => {
     return message;
   };
 
-  /*!******************!*\
-    !*** comment.js ***!
-  \*!******************!*/
   // header comment
   /**
    * Comment for echo
