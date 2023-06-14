@@ -40,7 +40,7 @@ const buildAndAssertOutput = async (
 
 describe("rollup-plugin-gas", () => {
   it.each(["basic", "allow-function"])(
-    "should entry point function is added. #%s",
+    "Should add entry point function to the bandle file #%s",
     async (scenario) => {
       await buildAndAssertOutput({
         scenario: scenario,
@@ -49,14 +49,14 @@ describe("rollup-plugin-gas", () => {
     }
   );
 
-  it("shold included comments", async () => {
+  it("Should includ comments", async () => {
     await buildAndAssertOutput(
       { scenario: "comment", dirFixtures: dirFixtures },
       { comment: true }
     );
   });
 
-  it("shoud output entrypoint function of the specified file", async () => {
+  it("Should add entrypoint function of the specified file", async () => {
     const dirIncludeFixtures = path.resolve(__dirname, "./fixtures/include");
     await buildAndAssertOutput(
       { scenario: "include", dirFixtures: dirIncludeFixtures },
