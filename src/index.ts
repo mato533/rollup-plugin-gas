@@ -7,6 +7,7 @@ import { basename } from "path";
 const defaultOptions = {
   comment: false,
   include: ["**/*"],
+  moduleHeaderComment: false,
 };
 
 const generateChunckHeader = (code: string, id: string) => {
@@ -30,7 +31,11 @@ const rollupPluginGas = (options?: RollupPluginGasOption): Plugin => {
     },
     transform(code, id) {
       if (!filter(id)) {
-        return generateChunckHeader(code, id);
+        if (configratedOptions.moduleHeaderComment) {
+          return generateChunckHeader(code, id);
+        } else {
+          return;
+        }
       }
       const gasCode = generate(code, { comment: configratedOptions.comment });
       if (gasCode.entryPointFunctions) {
@@ -42,7 +47,11 @@ const rollupPluginGas = (options?: RollupPluginGasOption): Plugin => {
           code && entryPointFunctions.push(`${code}`);
         });
       }
-      return generateChunckHeader(code, id);
+      if (configratedOptions.moduleHeaderComment) {
+        return generateChunckHeader(code, id);
+      } else {
+        return;
+      }
     },
     banner() {
       return ["var global = this;", ...entryPointFunctions].join("\n");
