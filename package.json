@@ -50,7 +50,6 @@
     "conventional-changelog-cli": "^3.0.0",
     "eslint": "^8.41.0",
     "eslint-config-prettier": "^8.8.0",
-    "fs": "^0.0.1-security",
     "prettier": "^2.8.8",
     "rollup": "^3.23.0",
     "typescript": "5.0.4",
