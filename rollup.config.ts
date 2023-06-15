@@ -52,7 +52,10 @@ const defineConfig = (pkg: Record<string, any>) => {
     ],
     plugins: [
       typescript({ sourceMap: true }),
-      copy({ targets: [{ src: "types/index.d.ts", dest: "dist/types" }] }),
+      copy({
+        targets: [{ src: "types/index.d.ts", dest: "dist/types" }],
+        verbose: true,
+      }),
     ],
   };
 };
