@@ -30,7 +30,7 @@ jobs:
       - name: Identify the version about to release
         id: identify-version
         run: |
-          APP_VERSION="$(echo '${{ github.event.pull_request.title }}' |grep -o -E "([0-9]+\.){1}[0-9]+(\.[0-9]+)?" | head -n1)"
+          APP_VERSION="$(echo '${{ github.head_ref }}' |grep -o -E "([0-9]+\.){1}[0-9]+(\.[0-9]+)?" | head -n1)"
           if [ ! -n "${APP_VERSION}" ]
           then
             exit 255
