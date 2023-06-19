@@ -30,7 +30,7 @@ jobs:
         run: yarn run test:ts
 
   lint:
-    name: Lint & format check
+    name: Format check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
