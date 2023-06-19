@@ -55,6 +55,7 @@ Google Apps Script requires the entry point to be a top-level function declarati
 You can pass a object of configuration options to rollup-plugin-gas. Allowed values are as follows
 | Name | Type | Default | Description |
 -------|------|---------|-------------|
+
 | comment | `{boolean}` | `false` | If `true` then generate a top level function declaration statement with comment. |
 | include | `{Array<string>}` | `[**/*]` | Array of path patterns to detect functions to generate top level function definitions. accept glob pattern. |
 |moduleHeaderComment|`{boolean}`|`false` | If `true`, Print a comment of the module filename to the bandle file.|
