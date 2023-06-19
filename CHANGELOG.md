@@ -1,4 +1,4 @@
-# [1.1.0](https://github.com/mato533/rollup-plugin-gas/compare/v1.0.4...v1.1.0) (2023-06-19)
+## [1.1.1](https://github.com/mato533/rollup-plugin-gas/compare/v1.1.0...v1.1.1) (2023-06-19)
 
 ### Features
 
