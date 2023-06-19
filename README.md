@@ -1,7 +1,7 @@
 # rollup-plugin-google-apps-script
 
 [![npm version](https://badge.fury.io/js/rollup-plugin-google-apps-script.svg)](https://badge.fury.io/js/rollup-plugin-google-apps-script)
-[![CircleCI](https://dl.circleci.com/status-badge/img/gh/mato533/rollup-plugin-gas/tree/main.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/mato533/rollup-plugin-gas/tree/main)
+[![CI](https://github.com/mato533/rollup-plugin-gas/actions/workflows/test.yaml/badge.svg)](https://github.com/mato533/rollup-plugin-gas/actions/workflows/test.yaml)
 [![codecov](https://codecov.io/gh/mato533/rollup-plugin-gas/branch/main/graph/badge.svg?token=50Z04K2PVN)](https://codecov.io/gh/mato533/rollup-plugin-gas)
 [![license](https://img.shields.io/npm/l/rollup.svg)](https://github.com/rollup/rollup/blob/master/LICENSE.md)
 
@@ -55,6 +55,7 @@ Google Apps Script requires the entry point to be a top-level function declarati
 You can pass a object of configuration options to rollup-plugin-gas. Allowed values are as follows
 | Name | Type | Default | Description |
 -------|------|---------|-------------|
+
 | comment | `{boolean}` | `false` | If `true` then generate a top level function declaration statement with comment. |
 | include | `{Array<string>}` | `[**/*]` | Array of path patterns to detect functions to generate top level function definitions. accept glob pattern. |
 |moduleHeaderComment|`{boolean}`|`false` | If `true`, Print a comment of the module filename to the bandle file.|

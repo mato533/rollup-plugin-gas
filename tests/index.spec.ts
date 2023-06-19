@@ -84,7 +84,6 @@ describe("rollup-plugin-gas", () => {
   });
 
   it("Should add entrypoint function of the specified file", async () => {
-    const dirIncludeFixtures = path.resolve(__dirname, "./fixtures/include");
     await buildAndAssertOutput(
       { scenario: "include", dirFixtures: dirIncludeFixtures },
       { include: ["**/include.js"] }
