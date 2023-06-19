@@ -1,4 +1,8 @@
-## [1.1.1](https://github.com/mato533/rollup-plugin-gas/compare/v1.1.0...v1.1.1) (2023-06-19)
+## [1.1.2](https://github.com/mato533/rollup-plugin-gas/compare/v1.1.1...v1.1.2) (2023-06-19)
+
+### Bug Fixes
+
+- Fix for type of readme ([f65def2](https://github.com/mato533/rollup-plugin-gas/commit/f65def2871bee8e000bb177283074b03b6a03871))
 
 ### Features
 
