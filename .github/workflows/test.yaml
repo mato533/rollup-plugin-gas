@@ -1,12 +1,13 @@
-name: Test for develop
+name: Test
 
 on:
   push:
     branches:
-      - feature/ci-setting
+      - develop
 
 jobs:
   build:
+    name: Build & Test
     runs-on: ubuntu-latest
 
     steps:
@@ -14,20 +15,22 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: "18.x"
+          cache: "yarn"
 
       - name: Install dependencies
         run: yarn --frozen-lockfile
 
       - name: Build
-        run: yarn build
+        run: yarn run build
 
       - name: Unit test
-        run: yarn test
+        run: yarn run test
 
       - name: Test for Types
-        run: yarn test:ts
+        run: yarn run test:ts
 
   lint:
+    name: Lint & format check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

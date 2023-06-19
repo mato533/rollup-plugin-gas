@@ -1,0 +1,161 @@
+name: Pre-release tasks
+
+on:
+  push:
+    branches:
+      - release/**
+    tags:
+      - "!*"
+
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GH_EMAIL: "41898282+github-actions[bot]@users.noreply.github.com"
+  GH_USER: "github-actions[bot]"
+
+jobs:
+  prepare:
+    if: "${{ startsWith(github.event.head_commit.message, 'release:') }}"
+    name: Prepare for the release
+    runs-on: ubuntu-latest
+
+    outputs:
+      app_version: ${{ steps.identify-version.outputs.app_version }}
+      app_version_text: ${{ steps.identify-version.outputs.app_version_text }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+          cache: "yarn"
+
+      - name: Identify the version about to release
+        id: identify-version
+        run: |
+          APP_VERSION="$(echo ${{ github.ref_name }} |grep -o -E "([0-9]+\.){1}[0-9]+(\.[0-9]+)?" | head -n1)"
+          if [ ! -n "${APP_VERSION}" ]
+          then
+            exit 255
+          fi
+          echo "app_version=${APP_VERSION}" >>"${GITHUB_OUTPUT}"
+          echo "app_version_text=v${APP_VERSION}" >>"${GITHUB_OUTPUT}"
+
+  lint:
+    needs:
+      - prepare
+    name: Lint & Format
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+          cache: "yarn"
+
+      - name: Install dependencies
+        run: yarn --frozen-lockfile
+
+      - name: Setting Github user informations
+        run: |
+          git config --local user.email "${{ env.GH_EMAIL }}"
+          git config --local user.name "${{ env.GH_USER }}"
+      - name: Create the changelog
+        run: yarn run changelog
+
+      - name: Run the lint and format
+        run: yarn run fix
+
+      - name: Commit and push
+        run: |
+          git add -N .
+          if ! git diff --exit-code --quiet
+          then
+            git add .
+            git commit -m "chore: Preparing for release(${{ needs.prepare.outputs.app_version_text }})"
+            git push
+          fi
+
+  test:
+    name: Test & Build
+    needs:
+      - prepare
+      - lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Pull the remote branch
+        run: git pull $(git remote show) ${{ github.ref_name }}
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+          cache: "yarn"
+      - name: Install dependencies
+        run: yarn --frozen-lockfile
+      - name: Unit test
+        run: yarn run test
+
+      - name: Test for Types
+        run: yarn run test:ts
+
+      - name: Build test
+        run: yarn run build
+
+  create-pr:
+    name: Create the pull request to master branch
+    needs:
+      - prepare
+      - lint
+      - test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Pull the remote branch
+        run: git pull $(git remote show) ${{ github.ref_name }}
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+          cache: "yarn"
+
+      - name: Setting Github user informations.
+        run: |
+          git config --local user.email "${{ env.GH_EMAIL }}"
+          git config --local user.name "${{ env.GH_USER }}"
+
+      - name: Update the version text at the package.json
+        run: yarn version --new-version "${{ needs.prepare.outputs.app_version }}" --no-git-tag-version
+
+      - name: Commit and push
+        run: |
+          git pull
+          git add -N .
+          if ! git diff --exit-code --quiet
+          then
+            git add .
+            git commit -m "chore: Update the package.json(${{ needs.prepare.outputs.app_version_text }})            "
+            git push
+          fi
+
+      - name: Define the pull request title.
+        id: define-pr-title
+        run: |
+          echo "pr_title=chore: Release for ${{ needs.prepare.outputs.app_version_text }}">>"${GITHUB_OUTPUT}"
+
+      - name: Check for duplicate pull requests.
+        id: check-pr-count
+        run: |
+          PR_COUNT="$(gh pr list -S '${{ steps.define-pr-title.outputs.pr_title }}' in:title | wc -l)"
+          echo "pr_count=${PR_COUNT}">>"${GITHUB_OUTPUT}"
+
+      - name: Create pull request(for master)
+        if: ${{ steps.check-pr-count.outputs.pr_count }} == 0
+        run: |
+          gh pr create \
+            -B master \
+            -t "${{ steps.define-pr-title.outputs.pr_title }} (master)" \
+            -a ${{ github.actor }} \
+            --body-file ./.github/RELEASE_WORKFLOW_TEMPLATE.md
