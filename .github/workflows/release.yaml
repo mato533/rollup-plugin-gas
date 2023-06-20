@@ -1,4 +1,5 @@
 name: CD
+run-name: "Execute release tasks for ${{ github.head_ref }}"
 on:
   pull_request:
     branches:
@@ -12,12 +13,9 @@ env:
 
 jobs:
   prepare:
-    if: >-
-      github.event.pull_request.merged == true && 
-      "${{ startsWith(github.event.pull_request.title, 'chore: [CD]Release for') }}
     name: Prepare for the release job
+    if: "${{ github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, 'chore: [CD]Release for') }}"
     runs-on: ubuntu-latest
-
     outputs:
       app_version: ${{ steps.identify-version.outputs.app_version }}
       app_version_text: ${{ steps.identify-version.outputs.app_version_text }}
@@ -151,9 +149,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-        ref: ${{ github.head_ref }}
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
 
       - name: Pull the remote branch
         run: git pull $(git remote show) ${{ github.head_ref }}

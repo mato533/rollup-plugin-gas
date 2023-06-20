@@ -1,5 +1,5 @@
 name: Pre-release tasks
-
+run-name: "Execute pre-release tasks @${{ github.ref_name }}"
 on:
   push:
     branches:
