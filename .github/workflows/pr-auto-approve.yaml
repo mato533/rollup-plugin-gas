@@ -1,4 +1,5 @@
 name: Auto Approve
+run-name: "Auto Approve the pull for #${{ github.event.pull_request.number }}"
 on:
   pull_request:
     types:
