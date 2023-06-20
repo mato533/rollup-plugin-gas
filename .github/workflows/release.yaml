@@ -13,7 +13,7 @@ env:
 jobs:
   prepare:
     name: Prepare for the release job
-    if: ${{ github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, 'chore: [CD]Release for') }}
+    if: "${{ github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, 'chore: [CD]Release for') }}"
     runs-on: ubuntu-latest
     outputs:
       app_version: ${{ steps.identify-version.outputs.app_version }}
