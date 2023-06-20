@@ -151,9 +151,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-        ref: ${{ github.head_ref }}
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
 
       - name: Pull the remote branch
         run: git pull $(git remote show) ${{ github.head_ref }}
