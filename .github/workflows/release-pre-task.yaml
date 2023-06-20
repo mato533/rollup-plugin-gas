@@ -146,12 +146,8 @@ jobs:
       - name: Create pull request(for master)
         if: ${{ steps.check-pr-count.outputs.pr_count }} == 0
         run: |
-          PR_URL="$(gh pr create \
+          gh pr create \
             -B master \
             -t "${{ steps.define-pr-title.outputs.pr_title }}" \
             -a ${{ github.actor }} \
-            --body-file ./.github/RELEASE_WORKFLOW_TEMPLATE.md)"
-          test $? -ne 0 && exit 255
-          PR_NUMBER="$(echo "${url##*/}")"
-          PR_TITLE_WITH_NUM="${{ steps.define-pr-title.outputs.pr_title }} (${PR_NUMBER})"
-          gh pr edit "${PR_URL}" -t ${PR_TITLE_WITH_NUM}
+            --body-file ./.github/RELEASE_WORKFLOW_TEMPLATE.md
