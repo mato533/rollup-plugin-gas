@@ -1,4 +1,5 @@
 name: CD
+run-name: "Execute release tasks for ${{ github.head_ref }}"
 on:
   pull_request:
     branches:

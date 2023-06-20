@@ -1,5 +1,5 @@
 name: CI
-
+run-name: "Execute unit-tests and build @${{ github.ref_name }}"
 on:
   push:
     branches:
