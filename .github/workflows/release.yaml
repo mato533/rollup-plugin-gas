@@ -171,12 +171,16 @@ jobs:
       - name: Define the pull request title.
         id: define-pr-title
         run: |
-          echo "pr_title=chore: Merge the latest release ${{ needs.prepare.outputs.app_version_text }} (develop)">>"${GITHUB_OUTPUT}"
+          echo "pr_title=chore: Release for ${{ needs.prepare.outputs.app_version_text }}">>"${GITHUB_OUTPUT}"
 
       - name: Create pull request(for develop)
         run: |
-          gh pr create \
-            -B develop \
-            -t '${{ steps.define-pr-title.outputs.pr_title }}' \
+          PR_URL="$(gh pr create \
+            -B master \
+            -t "${{ steps.define-pr-title.outputs.pr_title }}" \
             -a ${{ github.actor }} \
-            --body-file ./.github/RELEASE_WORKFLOW_TEMPLATE.md
+            --body-file ./.github/RELEASE_WORKFLOW_TEMPLATE.md)"
+          test $? -ne 0 && exit 255
+          PR_NUMBER="$(echo "${url##*/}")"
+          PR_TITLE_WITH_NUM="${{ steps.define-pr-title.outputs.pr_title }} (${PR_NUMBER})"
+          gh pr edit "${PR_URL}" -t ${PR_TITLE_WITH_NUM}
