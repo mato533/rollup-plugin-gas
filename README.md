@@ -60,7 +60,6 @@ You can pass a object of configuration options to rollup-plugin-gas. Allowed val
 |moduleHeaderComment|`{boolean}`|`false` | If `true`, Print a comment of the module filename to the bandle file.|
 |manifest.copy|`{boolean}`|`false` |if ture, copy the manifest file (`appsscript.json`) to output directory from `manifest.srcDir`.|
 |manifest.srcDir|`{string}`|`process.cwd()`|Set relative path from the project root to the directory where the manifest file (`appsscript.json`) is located, if you create the file at other than project root.|
-|||||
 
 ## Example
 
