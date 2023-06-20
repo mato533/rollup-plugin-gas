@@ -9,15 +9,13 @@ env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   GH_EMAIL: "41898282+github-actions[bot]@users.noreply.github.com"
   GH_USER: "github-actions[bot]"
+  PR_TITLE_START: "chore: [CD]Release for"
 
 jobs:
   prepare:
-    if: >-
-      github.event.pull_request.merged == true && 
-      ${{ startsWith(github.event.pull_request.title, 'chore: [CD]Release for') }}
     name: Prepare for the release job
+    if: ${{ github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, env.PR_TITLE_START) }}
     runs-on: ubuntu-latest
-
     outputs:
       app_version: ${{ steps.identify-version.outputs.app_version }}
       app_version_text: ${{ steps.identify-version.outputs.app_version_text }}
