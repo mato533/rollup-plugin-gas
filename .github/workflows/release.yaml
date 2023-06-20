@@ -151,8 +151,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        ref: ${{ github.head_ref }}
+
       - name: Pull the remote branch
-        run: git pull $(git remote show) ${{ github.ref_name }}
+        run: git pull $(git remote show) ${{ github.head_ref }}
 
       - uses: actions/setup-node@v3
         with:
