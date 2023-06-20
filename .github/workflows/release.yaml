@@ -112,6 +112,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage/coverage-final.json
           verbose: true
+          overrideBranch: ${{ github.ref_name }}
 
   tag:
     name: Add the tag for the released version
