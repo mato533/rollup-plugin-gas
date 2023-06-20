@@ -12,7 +12,9 @@ env:
 
 jobs:
   prepare:
-    if: github.event.pull_request.merged == true
+    if: >-
+      github.event.pull_request.merged == true && 
+      "${{ startsWith(github.event.pull_request.title, 'chore: [CD]Release for') }}
     name: Prepare for the release job
     runs-on: ubuntu-latest
 

@@ -135,7 +135,7 @@ jobs:
       - name: Define the pull request title.
         id: define-pr-title
         run: |
-          echo "pr_title=chore: Release for ${{ needs.prepare.outputs.app_version_text }}">>"${GITHUB_OUTPUT}"
+          echo "pr_title=chore: [CD]Release for ${{ needs.prepare.outputs.app_version_text }}">>"${GITHUB_OUTPUT}"
 
       - name: Check for duplicate pull requests.
         id: check-pr-count
