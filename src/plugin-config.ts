@@ -21,6 +21,7 @@ const getPluginSetting = (options?: RollupPluginGasOptions) => {
       copy: false,
       srcDir: process.cwd(),
     },
+    verbose: false,
   };
 
   if (!options) {
