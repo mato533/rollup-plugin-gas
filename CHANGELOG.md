@@ -1,4 +1,4 @@
-## [1.1.3](https://github.com/mato533/rollup-plugin-gas/compare/v1.1.2...v1.1.3) (2023-06-20)
+## [1.1.4](https://github.com/mato533/rollup-plugin-gas/compare/v1.1.2...v1.1.4) (2023-06-21)
 
 ### Bug Fixes
 
@@ -7,6 +7,7 @@
 ### Features
 
 - Support for switching to print the file name to bandle ([b2f8b5a](https://github.com/mato533/rollup-plugin-gas/commit/b2f8b5a7167e5066759ee6ed1e6ed5217a9079a4))
+- Support for the verbose option ([7d33349](https://github.com/mato533/rollup-plugin-gas/commit/7d33349c294cb99beda4c8caa4a3605d859ee1ea))
 - Support to copy the manifest file to dist directory ([1378827](https://github.com/mato533/rollup-plugin-gas/commit/1378827238f4e1a09b0b3dda2f3af57701899d39))
 
 ## [1.0.4](https://github.com/mato533/rollup-plugin-gas/compare/v1.0.3...v1.0.4) (2023-06-08)
