@@ -1,3 +1,9 @@
+## [1.1.3](https://github.com/mato533/rollup-plugin-gas/compare/v1.1.2...v1.1.3) (2023-06-20)
+
+### Bug Fixes
+
+- Remove unnecessary lines for README.md ([8e3a504](https://github.com/mato533/rollup-plugin-gas/commit/8e3a504470d4319232c749f23d92b9443490fd22))
+
 ## [1.1.2](https://github.com/mato533/rollup-plugin-gas/compare/v1.1.1...v1.1.2) (2023-06-19)
 
 ### Bug Fixes
