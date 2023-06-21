@@ -54,12 +54,13 @@ Google Apps Script requires the entry point to be a top-level function declarati
 
 You can pass a object of configuration options to rollup-plugin-gas. Allowed values are as follows
 | Name | Type | Default | Description |
--------|------|---------|-------------|
+| ------------------- | :---------------: | :-------------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | comment | `{boolean}` | `false` | If `true` then generate a top level function declaration statement with comment. |
 | include | `{Array<string>}` | `[**/*]` | Array of path patterns to detect functions to generate top level function definitions. accept glob pattern. |
-|moduleHeaderComment|`{boolean}`|`false` | If `true`, Print a comment of the module filename to the bandle file.|
-|manifest.copy|`{boolean}`|`false` |if ture, copy the manifest file (`appsscript.json`) to output directory from `manifest.srcDir`.|
-|manifest.srcDir|`{string}`|`process.cwd()`|Set relative path from the project root to the directory where the manifest file (`appsscript.json`) is located, if you create the file at other than project root.|
+| moduleHeaderComment | `{boolean}` | `false` | If `true`, Print a comment of the module filename to the bandle file. |
+| manifest.copy | `{boolean}` | `false` | if ture, copy the manifest file (`appsscript.json`) to output directory from `manifest.srcDir`. |
+| manifest.srcDir | `{string}` | `process.cwd()` | Set relative path from the project root to the directory where the manifest file (`appsscript.json`) is located, if you create the file at other than project root. |
+| verbose | `{boolean}` | `false` | If `true` then output details of processing to the console. |
 
 ## Example
 
@@ -162,10 +163,10 @@ You can pass a object of configuration options to rollup-plugin-gas. Allowed val
 
   |    Option     | Value |
   | :-----------: | :---: |
-  | output.format |  umd  |
+  | output.format | `umd` |
 
 - When use vite, following configration is required.
 
-  |    Option    | Value | Remarks                                                                |
-  | :----------: | :---: | ---------------------------------------------------------------------- |
-  | build.minify | false | Disable minify because the function name defined in script is changed. |
+  |    Option    |  Value  | Remarks                                                                |
+  | :----------: | :-----: | ---------------------------------------------------------------------- |
+  | build.minify | `false` | Disable minify because the function name defined in script is changed. |
