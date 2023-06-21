@@ -1,5 +1,6 @@
 import path from "path";
 import fs from "fs";
+import pc from "picocolors";
 import { rollup } from "rollup";
 import type { OutputAsset } from "rollup";
 import { describe, expect, it } from "vitest";
@@ -124,5 +125,64 @@ describe("rollup-plugin-gas", () => {
     await buildAndAssertManifest({
       manifest: { copy: true, srcDir: "./fixtures" },
     });
+  });
+
+  it("Should print logs when verbose option is used", async () => {
+    vi.spyOn(process, "cwd").mockReturnValue(dirFixtures);
+    const spyLog = vi.spyOn(console, "log");
+
+    await buildAndAssertManifest({
+      manifest: { copy: true },
+      verbose: true,
+    });
+    expect(spyLog).toHaveBeenCalledTimes(3);
+    expect(spyLog).nthCalledWith(
+      1,
+      pc.gray("[gas] ") +
+        pc.gray("Generated target: ") +
+        pc.green(pc.bold("./basic.js"))
+    );
+    expect(spyLog).nthCalledWith(
+      2,
+      pc.gray("[gas] ") +
+        pc.gray("Generated target: ") +
+        pc.green(pc.bold("./echo.js"))
+    );
+    expect(spyLog).nthCalledWith(
+      3,
+      pc.gray("[gas] ") +
+        pc.gray("Copy the manifest from: ") +
+        pc.green(pc.bold("./appsscript.json"))
+    );
+  });
+
+  it("Should print logs when verbose option is used (exclude)", async () => {
+    const spyLog = vi.spyOn(console, "log");
+    await buildAndAssertOutput(
+      { scenario: "include", dirFixtures: dirIncludeFixtures },
+      { include: ["**/include.js"], verbose: true }
+    );
+    expect(spyLog).toHaveBeenCalledTimes(2);
+    expect(spyLog).nthCalledWith(
+      1,
+      pc.gray("[gas] ") +
+        pc.gray("Generated target: ") +
+        pc.green(pc.bold("./include/include.js"))
+    );
+    expect(spyLog).nthCalledWith(
+      2,
+      pc.gray("[gas] ") +
+        pc.gray("Excluded target: ") +
+        pc.yellow(pc.bold("./include/foo.js"))
+    );
+  });
+
+  it("Should not print logs when verbose option is not setted", async () => {
+    const spyLog = vi.spyOn(console, "log");
+    await buildAndAssertOutput(
+      { scenario: "include", dirFixtures: dirIncludeFixtures },
+      { include: ["**/include.js"] }
+    );
+    expect(spyLog).toHaveBeenCalledTimes(0);
   });
 });
