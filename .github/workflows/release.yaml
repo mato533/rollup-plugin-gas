@@ -1,0 +1,176 @@
+name: Release
+on:
+  pull_request:
+    branches:
+      - master
+    types: [closed]
+
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GH_EMAIL: "41898282+github-actions[bot]@users.noreply.github.com"
+  GH_USER: "github-actions[bot]"
+
+jobs:
+  prepare:
+    if: github.event.pull_request.merged == true
+    name: Prepare for the release job
+    runs-on: ubuntu-latest
+
+    outputs:
+      app_version: ${{ steps.identify-version.outputs.app_version }}
+      app_version_text: ${{ steps.identify-version.outputs.app_version_text }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+          cache: "yarn"
+
+      - name: Identify the version about to release
+        id: identify-version
+        run: |
+          APP_VERSION="$(echo '${{ github.event.pull_request.title }}' |grep -o -E "([0-9]+\.){1}[0-9]+(\.[0-9]+)?" | head -n1)"
+          if [ ! -n "${APP_VERSION}" ]
+          then
+            exit 255
+          fi
+          echo "app_version=${APP_VERSION}" >>"${GITHUB_OUTPUT}"
+          echo "app_version_text=v${APP_VERSION}" >>"${GITHUB_OUTPUT}"
+
+  test:
+    name: Test & build
+    needs:
+      - prepare
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+          cache: "yarn"
+      - name: Install dependencies
+        run: yarn --frozen-lockfile
+
+      - name: Run the test
+        run: yarn run test
+
+      - name: Run the test for typescripts
+        run: yarn run test:ts
+
+      - name: Run the test for build
+        run: yarn run build
+
+  publish:
+    name: Publish to the NPM registry
+    needs:
+      - prepare
+      - test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+          cache: "yarn"
+          registry-url: "https://registry.npmjs.org"
+      - name: Install dependencies
+        run: yarn --frozen-lockfile
+
+      - name: Run the build
+        run: |
+          yarn run build
+
+      - name: Publish
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  coverage:
+    name: Upload the coverage
+    needs:
+      - prepare
+      - test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+          cache: "yarn"
+      - name: Install dependencies
+        run: yarn --frozen-lockfile
+
+      - name: Run the coverage
+        run: yarn run coverage
+
+      - uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/coverage-final.json
+          verbose: true
+
+  tag:
+    name: Add the tag for the released version
+    needs:
+      - prepare
+      - test
+      - publish
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+          cache: "yarn"
+
+      - name: Set Github user informations.
+        run: |
+          git config --local user.email "${{ env.GH_EMAIL }}"
+          git config --local user.name "${{ env.GH_USER }}"
+
+      - name: Add the release tag
+        run: |
+          git tag ${{ needs.prepare.outputs.app_version_text }}
+          git push origin ${{ needs.prepare.outputs.app_version_text }}
+
+  merge-to-develop:
+    name: Create the pull request to develop
+    needs:
+      - prepare
+      - test
+      - publish
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Pull the remote branch
+        run: git pull $(git remote show) ${{ github.ref_name }}
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+          cache: "yarn"
+
+      - name: Set Github user informations.
+        run: |
+          git config --local user.email "${{ env.GH_EMAIL }}"
+          git config --local user.name "${{ env.GH_USER }}"
+
+      - name: Define the pull request title.
+        id: define-pr-title
+        run: |
+          echo "pr_title=chore: Merge the latest release ${{ needs.prepare.outputs.app_version_text }} (develop)">>"${GITHUB_OUTPUT}"
+
+      - name: Create pull request(for develop)
+        run: |
+          gh pr create \
+            -B develop \
+            -t '${{ steps.define-pr-title.outputs.pr_title }}' \
+            -a ${{ github.actor }} \
+            --body-file ./.github/RELEASE_WORKFLOW_TEMPLATE.md
