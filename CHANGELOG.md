@@ -1,8 +1,14 @@
-## [1.1.3](https://github.com/mato533/rollup-plugin-gas/compare/v1.1.2...v1.1.3) (2023-06-20)
+## [1.1.4](https://github.com/mato533/rollup-plugin-gas/compare/v1.1.3...v1.1.4) (2023-06-22)
+
+### Features
+
+- Support for the verbose option ([f7690ad](https://github.com/mato533/rollup-plugin-gas/commit/f7690adefb1ad4f3ceb1a63a28bc3ec0833a8a3c))
+
+## [1.1.3](https://github.com/mato533/rollup-plugin-gas/compare/v1.1.2...v1.1.3) (2023-06-21)
 
 ### Bug Fixes
 
-- Remove unnecessary lines for README.md ([8e3a504](https://github.com/mato533/rollup-plugin-gas/commit/8e3a504470d4319232c749f23d92b9443490fd22))
+- Remove unnecessary lines for README.md ([22dca35](https://github.com/mato533/rollup-plugin-gas/commit/22dca352b90facd8d1f1760ad1812ae073e152bf))
 
 ## [1.1.2](https://github.com/mato533/rollup-plugin-gas/compare/v1.1.1...v1.1.2) (2023-06-19)
 
