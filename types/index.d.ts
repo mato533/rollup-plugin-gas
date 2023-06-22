@@ -8,6 +8,7 @@ export interface RollupPluginGasOptions {
   include?: Array<string>;
   moduleHeaderComment?: boolean;
   manifest?: ManifestOptions;
+  verbose?: boolean;
 }
 
 type DeepRequired<T> = {
