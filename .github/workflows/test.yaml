@@ -3,10 +3,11 @@ run-name: "Execute unit-tests and build @${{ github.ref_name }}"
 on:
   push:
     branches:
-      - develop
+      - master
 
 jobs:
   build:
+    if: "${{ !startsWith(github.event.head_commit.message, 'release:') }}"
     name: Build & Test
     runs-on: ubuntu-latest
 
@@ -31,6 +32,7 @@ jobs:
 
   lint:
     name: Format check
+    if: "${{ !startsWith(github.event.head_commit.message, 'release:') }}"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

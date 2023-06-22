@@ -1,10 +1,11 @@
 name: CD
 run-name: "Execute release tasks for ${{ github.head_ref }}"
 on:
-  pull_request:
+  push:
     branches:
       - master
-    types: [closed]
+    tags:
+      - "!*"
 
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -14,7 +15,7 @@ env:
 jobs:
   prepare:
     name: Prepare for the release job
-    if: "${{ github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, 'chore: [CD]Release for') }}"
+    if: "${{ startsWith(github.event.head_commit.message, 'release:') }}"
     runs-on: ubuntu-latest
     outputs:
       app_version: ${{ steps.identify-version.outputs.app_version }}
@@ -30,9 +31,8 @@ jobs:
       - name: Identify the version about to release
         id: identify-version
         run: |
-          APP_VERSION="$(echo '${{ github.head_ref }}' |grep -o -E "([0-9]+\.){1}[0-9]+(\.[0-9]+)?" | head -n1)"
-          if [ ! -n "${APP_VERSION}" ]
-          then
+          APP_VERSION="$(cat ./package.json |jq .version|sed -e 's/"//g'| head -n1)"
+          if [ ! -n "${APP_VERSION}" ]; then
             exit 255
           fi
           echo "app_version=${APP_VERSION}" >>"${GITHUB_OUTPUT}"
@@ -137,46 +137,3 @@ jobs:
         run: |
           git tag ${{ needs.prepare.outputs.app_version_text }}
           git push origin ${{ needs.prepare.outputs.app_version_text }}
-
-  merge-to-develop:
-    name: Create the pull request to develop
-    needs:
-      - prepare
-      - test
-      - publish
-
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          ref: ${{ github.head_ref }}
-
-      - name: Pull the remote branch
-        run: git pull $(git remote show) ${{ github.head_ref }}
-
-      - uses: actions/setup-node@v3
-        with:
-          node-version: "18.x"
-          cache: "yarn"
-
-      - name: Set Github user informations.
-        run: |
-          git config --local user.email "${{ env.GH_EMAIL }}"
-          git config --local user.name "${{ env.GH_USER }}"
-
-      - name: Define the pull request title.
-        id: define-pr-title
-        run: |
-          echo "pr_title=chore: Release for ${{ needs.prepare.outputs.app_version_text }}">>"${GITHUB_OUTPUT}"
-
-      - name: Create pull request(for develop)
-        run: |
-          PR_URL="$(gh pr create \
-            -B master \
-            -t "${{ steps.define-pr-title.outputs.pr_title }}" \
-            -a ${{ github.actor }} \
-            --body-file ./.github/RELEASE_WORKFLOW_TEMPLATE.md)"
-          test $? -ne 0 && exit 255
-          gh pr merge "${PR_URL}" --auto
