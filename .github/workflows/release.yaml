@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - master
+    paths:
+      - "package.json"
     tags:
       - "!*"
 
@@ -13,9 +15,37 @@ env:
   GH_USER: "github-actions[bot]"
 
 jobs:
+  release-check:
+    name: Check if the version in package.json
+    runs-on: ubuntu-latest
+    outputs:
+      is_release: ${{ steps.check-diff-version.outputs.is_release }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+          cache: "yarn"
+
+      - name: Check the version
+        id: check-diff-version
+        run: |
+          DIFF_COUNT="$(git diff HEAD HEAD^ --relative package.json |grep '"version":'|wc -l)"
+          if [ ${DIFF_COUNT} -eq 2 ]; then
+            echo "is_release=1" >>"${GITHUB_OUTPUT}"
+          else
+            echo "is_release=0" >>"${GITHUB_OUTPUT}"
+          fi
+
   prepare:
     name: Prepare for the release job
-    if: "${{ startsWith(github.event.head_commit.message, 'release:') }}"
+    needs:
+      - release-check
+    if: ${{ needs.release-check.outputs.is_release > 0 }}
     runs-on: ubuntu-latest
     outputs:
       app_version: ${{ steps.identify-version.outputs.app_version }}
@@ -68,10 +98,9 @@ jobs:
       - prepare
       - test
     runs-on: ubuntu-latest
-    environment: npm
-      permissions:
-        contents: read
-        id-token: write
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
