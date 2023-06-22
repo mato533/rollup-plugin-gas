@@ -68,7 +68,10 @@ jobs:
       - prepare
       - test
     runs-on: ubuntu-latest
-
+    environment: npm
+      permissions:
+        contents: read
+        id-token: write
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -84,7 +87,7 @@ jobs:
           yarn run build
 
       - name: Publish
-        run: npm publish
+        run: npm publish --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
