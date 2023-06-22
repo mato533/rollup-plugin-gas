@@ -1,8 +1,14 @@
+## [1.1.5](https://github.com/mato533/rollup-plugin-gas/compare/v1.1.4...v1.1.5) (2023-06-22)
+
+### Features
+
+- Support for the NPM provenance ([bea2b0f](https://github.com/mato533/rollup-plugin-gas/commit/bea2b0f5544717962149aab5ffe8b8bede82d423))
+
 ## [1.1.4](https://github.com/mato533/rollup-plugin-gas/compare/v1.1.3...v1.1.4) (2023-06-22)
 
 ### Features
 
-- Support for the verbose option ([f7690ad](https://github.com/mato533/rollup-plugin-gas/commit/f7690adefb1ad4f3ceb1a63a28bc3ec0833a8a3c))
+- Support for the verbose option ([916e784](https://github.com/mato533/rollup-plugin-gas/commit/916e784e156118a05a7fd8bc247f291bfac25aeb))
 
 ## [1.1.3](https://github.com/mato533/rollup-plugin-gas/compare/v1.1.2...v1.1.3) (2023-06-21)
 
