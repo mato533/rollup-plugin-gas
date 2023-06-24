@@ -1,11 +1,9 @@
 name: CD
-run-name: "Execute release tasks for ${{ github.head_ref }}"
+run-name: "Execute release tasks @${{ github.ref_name }}"
 on:
   push:
     branches:
       - master
-    paths:
-      - "package.json"
     tags:
       - "!*"
 
@@ -15,11 +13,13 @@ env:
   GH_USER: "github-actions[bot]"
 
 jobs:
-  release-check:
-    name: Check if the version in package.json
+  prepare:
+    name: Release check
     runs-on: ubuntu-latest
     outputs:
-      is_release: ${{ steps.check-diff-version.outputs.is_release }}
+      is_release: ${{ steps.release-decision.outputs.is_release }}
+      app_version: ${{ steps.identify-version.outputs.app_version }}
+      app_version_text: ${{ steps.identify-version.outputs.app_version_text }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -31,33 +31,6 @@ jobs:
           node-version: "18.x"
           cache: "yarn"
 
-      - name: Check the version
-        id: check-diff-version
-        run: |
-          DIFF_COUNT="$(git diff HEAD HEAD^ --relative package.json |grep '"version":'|wc -l)"
-          if [ ${DIFF_COUNT} -eq 2 ]; then
-            echo "is_release=1" >>"${GITHUB_OUTPUT}"
-          else
-            echo "is_release=0" >>"${GITHUB_OUTPUT}"
-          fi
-
-  prepare:
-    name: Prepare for the release job
-    needs:
-      - release-check
-    if: ${{ needs.release-check.outputs.is_release > 0 }}
-    runs-on: ubuntu-latest
-    outputs:
-      app_version: ${{ steps.identify-version.outputs.app_version }}
-      app_version_text: ${{ steps.identify-version.outputs.app_version_text }}
-
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: "18.x"
-          cache: "yarn"
-
       - name: Identify the version about to release
         id: identify-version
         run: |
@@ -65,15 +38,61 @@ jobs:
           if [ ! -n "${APP_VERSION}" ]; then
             exit 255
           fi
+          echo "Detected the version: ${APP_VERSION}"
           echo "app_version=${APP_VERSION}" >>"${GITHUB_OUTPUT}"
           echo "app_version_text=v${APP_VERSION}" >>"${GITHUB_OUTPUT}"
+
+      - name: Check the version
+        id: check-diff-version
+        run: |
+          DIFF_COUNT="$(git diff HEAD HEAD^ --relative package.json |grep '"version":'|wc -l)"
+          VAR_NAME="is_update_version"
+          if [ ${DIFF_COUNT} -eq 2 ]; then
+            echo "Detected to have updated the version in package.json"
+            echo "${VAR_NAME}=1" >>"${GITHUB_OUTPUT}"
+          else
+            echo "The version in package.json is not updated"
+            echo "${VAR_NAME}=0" >>"${GITHUB_OUTPUT}"
+          fi
+
+      - name: Check the commit message
+        id: check-commit-msg
+        run: |
+          echo 'Start the release process when the commit message contains the string "release" and the version value in package.json'
+          COMMIT_MSG="${{ github.event.head_commit.message }}"
+          COMMIT_MSG_LOW="$(echo "${COMMIT_MSG,,}")"
+          COUNT_RELEASE="$(echo "${COMMIT_MSG_LOW}" | grep "release" | wc -l)"
+          COUNT_VERSION="$(echo "${COMMIT_MSG_LOW}" | grep "${{steps.identify-version.outputs.app_version}}" | wc -l)"
+          VAR_NAME="is_release_commit"
+          if [ ${COUNT_RELEASE} -gt 0 ] && [ ${COUNT_VERSION} -gt 0  ]; then
+            echo "Judged from the commit message that it is subject to release processing."
+            echo "${VAR_NAME}=1" >>"${GITHUB_OUTPUT}"
+          else
+            echo "This commit is not  subject to release processing."
+            echo "${VAR_NAME}=0" >>"${GITHUB_OUTPUT}"
+          fi
+
+      - name: Decision to start release process
+        id: release-decision
+        run: |
+          echo "Release judgment based on update of package.json version value or commit message"
+          IS_UPDATE_VER=${{ steps.check-diff-version.outputs.is_update_version }}
+          IS_RELEASE_COMMIT=${{ steps.check-commit-msg.outputs.is_release_commit }}
+          VAR_NAME="is_release"
+          if [ ${IS_UPDATE_VER} -gt 0 ] || [ ${IS_RELEASE_COMMIT} -gt 0 ]; then
+            echo "Steart Release process"
+            echo "${VAR_NAME}=1" >>"${GITHUB_OUTPUT}"
+          else
+            echo "Skip Release process"
+            echo "${VAR_NAME}=0" >>"${GITHUB_OUTPUT}"
+          fi
 
   test:
     name: Test & build
     needs:
       - prepare
     runs-on: ubuntu-latest
-
+    if: ${{ needs.prepare.outputs.is_release > 0 }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -95,7 +114,6 @@ jobs:
   publish:
     name: Publish to the NPM registry
     needs:
-      - prepare
       - test
     runs-on: ubuntu-latest
     permissions:
@@ -123,7 +141,6 @@ jobs:
   coverage:
     name: Upload the coverage
     needs:
-      - prepare
       - test
     runs-on: ubuntu-latest
 
@@ -148,8 +165,6 @@ jobs:
   tag:
     name: Add the tag for the released version
     needs:
-      - prepare
-      - test
       - publish
     runs-on: ubuntu-latest
 
