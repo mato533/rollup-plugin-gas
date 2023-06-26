@@ -1,3 +1,5 @@
+## [1.1.6](https://github.com/mato533/rollup-plugin-gas/compare/v1.1.5...v1.1.6) (2023-06-26)
+
 ## [1.1.5](https://github.com/mato533/rollup-plugin-gas/compare/v1.1.4...v1.1.5) (2023-06-22)
 
 ### Features
@@ -37,7 +39,9 @@
 
 ## [1.0.2](https://github.com/mato533/rollup-plugin-gas/compare/v1.0.1...v1.0.2) (2023-06-08)
 
-## [1.0.1](https://github.com/mato533/rollup-plugin-gas/compare/ecdccaa9c6d72f2c04ee1d8aa65194655addf6aa...v1.0.1) (2023-06-08)
+## [1.0.1](https://github.com/mato533/rollup-plugin-gas/compare/v1.0.0...v1.0.1) (2023-06-08)
+
+# [1.0.0](https://github.com/mato533/rollup-plugin-gas/compare/ecdccaa9c6d72f2c04ee1d8aa65194655addf6aa...v1.0.0) (2023-06-07)
 
 ### Bug Fixes
 
