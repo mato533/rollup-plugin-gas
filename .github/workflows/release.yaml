@@ -165,6 +165,7 @@ jobs:
   tag:
     name: Add the tag for the released version
     needs:
+      - prepare
       - publish
     runs-on: ubuntu-latest
 
