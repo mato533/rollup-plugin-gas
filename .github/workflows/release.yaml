@@ -15,6 +15,7 @@ env:
 jobs:
   prepare:
     name: Release check
+    if: github.repository == 'mato533/rollup-plugin-gas'
     runs-on: ubuntu-latest
     outputs:
       is_release: ${{ steps.release-decision.outputs.is_release }}
@@ -165,6 +166,7 @@ jobs:
   tag:
     name: Add the tag for the released version
     needs:
+      - prepare
       - publish
     runs-on: ubuntu-latest
 

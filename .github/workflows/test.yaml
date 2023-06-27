@@ -4,10 +4,13 @@ on:
   push:
     branches:
       - master
+      - "dependabot/**"
+  pull_request:
+    types:
+      - opened
 
 jobs:
   build:
-    if: "${{ !startsWith(github.event.head_commit.message, 'release:') }}"
     name: Build & Test
     runs-on: ubuntu-latest
 
@@ -25,7 +28,7 @@ jobs:
         run: yarn run build
 
       - name: Unit test
-        run: yarn run test
+        run: yarn run coverage
 
       - name: Test for Types
         run: yarn run test:ts
