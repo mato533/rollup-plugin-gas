@@ -3,6 +3,7 @@
 [![npm version](https://badge.fury.io/js/rollup-plugin-google-apps-script.svg)](https://badge.fury.io/js/rollup-plugin-google-apps-script)
 [![CI](https://github.com/mato533/rollup-plugin-gas/actions/workflows/test.yaml/badge.svg?branch=master)](https://github.com/mato533/rollup-plugin-gas/actions/workflows/test.yaml)
 [![codecov](https://codecov.io/gh/mato533/rollup-plugin-gas/branch/main/graph/badge.svg?token=50Z04K2PVN)](https://codecov.io/gh/mato533/rollup-plugin-gas)
+[![CodeFactor](https://www.codefactor.io/repository/github/mato533/rollup-plugin-gas/badge)](https://www.codefactor.io/repository/github/mato533/rollup-plugin-gas)
 [![license](https://img.shields.io/npm/l/rollup.svg)](https://github.com/rollup/rollup/blob/master/LICENSE.md)
 
 ## About
@@ -21,19 +22,19 @@ Google Apps Script requires the entry point to be a top-level function declarati
 
 ### Sample of the source code
 
-    ```js
-    // main.js
+```js
+// main.js
 
-    // The plugin will nothing to generate for this function.
-    const sayHello = (target) => {
-      console.log(`Hello ${target}!!`)
-    }
+// The plugin will nothing to generate for this function.
+const sayHello = (target) => {
+  console.log(`Hello ${target}!!`);
+};
 
-    // The plugin will generate a top-level function declaration for this function.
-    global.greet = () => {
-      sayHello("world")
-    }
-    ```
+// The plugin will generate a top-level function declaration for this function.
+global.greet = () => {
+  sayHello("world");
+};
+```
 
 ## Installation
 
