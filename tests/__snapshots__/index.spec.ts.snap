@@ -1,0 +1,286 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`rollup-plugin-gas > Should add entry point function to the bandle file #allow-function 1`] = `
+"
+var global = this;
+function basic() {};
+(function (factory) {
+  typeof define === 'function' && define.amd ? define(factory) :
+  factory();
+})((function () { 'use strict';
+
+  global.basic = () => {
+    console.log(\\"test\\");
+  };
+
+}));
+"
+`;
+
+exports[`rollup-plugin-gas > Should add entry point function to the bandle file #basic 1`] = `
+"
+var global = this;
+function echo() {};
+function hello() {};
+function plus() {};
+function minus() {};
+(function (factory) {
+  typeof define === 'function' && define.amd ? define(factory) :
+  factory();
+})((function () { 'use strict';
+
+  const echo = (message) => {
+    return message;
+  };
+
+  /**
+   * Return write arguments.
+   */
+  global.echo = echo;
+
+  global.hello = function () {
+    console.log(\\"hello\\");
+  };
+
+  function plus(x, y) {
+    return x + y;
+  }
+  function minus(x, y) {
+    return x - y;
+  }
+  (global.plus = plus), (global.minus = minus);
+
+}));
+"
+`;
+
+exports[`rollup-plugin-gas > Should add entrypoint function of the specified file 1`] = `
+"
+var global = this;
+function includeTest() {};
+(function (factory) {
+  typeof define === 'function' && define.amd ? define(factory) :
+  factory();
+})((function () { 'use strict';
+
+  global.excludeFunction = () => {
+    console.log(\\"excludeFunction\\");
+  };
+
+  const foo = function () {
+    console.log(\\"foo\\");
+  };
+
+  global.includeTest = function () {
+    console.log(\\"includeTest\\");
+    foo();
+  };
+
+}));
+"
+`;
+
+exports[`rollup-plugin-gas > Should cgit opy the manifest file using srcDir option 1`] = `
+"{
+  \\"timeZone\\": \\"Asia/Tokyo\\",
+  \\"dependencies\\": {},
+  \\"webapp\\": {
+    \\"access\\": \\"MYSELF\\",
+    \\"executeAs\\": \\"USER_ACCESSING\\"
+  },
+  \\"exceptionLogging\\": \\"STACKDRIVER\\",
+  \\"runtimeVersion\\": \\"V8\\"
+}
+"
+`;
+
+exports[`rollup-plugin-gas > Should copy the manifest file 1`] = `
+"{
+  \\"timeZone\\": \\"Asia/Tokyo\\",
+  \\"dependencies\\": {},
+  \\"webapp\\": {
+    \\"access\\": \\"MYSELF\\",
+    \\"executeAs\\": \\"USER_ACCESSING\\"
+  },
+  \\"exceptionLogging\\": \\"STACKDRIVER\\",
+  \\"runtimeVersion\\": \\"V8\\"
+}
+"
+`;
+
+exports[`rollup-plugin-gas > Should include comments 1`] = `
+"
+var global = this;
+/**
+ * Comment for echo
+ */
+function echo() {};
+/**
+ * Comment foo
+ */
+function foo(message) {};
+(function (factory) {
+  typeof define === 'function' && define.amd ? define(factory) :
+  factory();
+})((function () { 'use strict';
+
+  const echo = (message) => {
+    return message;
+  };
+
+  // header comment
+  /**
+   * Comment for echo
+   */
+  global.echo = echo;
+
+  /**
+   * Comment foo
+   */
+  global.foo = (message) => {
+    // comment in the logic
+    console.log(message);
+  };
+  // end Comment
+
+}));
+"
+`;
+
+exports[`rollup-plugin-gas > Should not print logs when verbose option is not setted 1`] = `
+"
+var global = this;
+function includeTest() {};
+(function (factory) {
+  typeof define === 'function' && define.amd ? define(factory) :
+  factory();
+})((function () { 'use strict';
+
+  global.excludeFunction = () => {
+    console.log(\\"excludeFunction\\");
+  };
+
+  const foo = function () {
+    console.log(\\"foo\\");
+  };
+
+  global.includeTest = function () {
+    console.log(\\"includeTest\\");
+    foo();
+  };
+
+}));
+"
+`;
+
+exports[`rollup-plugin-gas > Should print each source filename to bandle file 1`] = `
+"
+var global = this;
+function echo() {};
+function foo(message) {};
+(function (factory) {
+  typeof define === 'function' && define.amd ? define(factory) :
+  factory();
+})((function () { 'use strict';
+
+  /*!***************!*\\\\
+    !*** echo.js ***!
+  \\\\*!***************!*/
+  const echo = (message) => {
+    return message;
+  };
+
+  /*!*************************!*\\\\
+    !*** comment-module.js ***!
+  \\\\*!*************************!*/
+  // header comment
+  /**
+   * Comment for echo
+   */
+  global.echo = echo;
+
+  /**
+   * Comment foo
+   */
+  global.foo = (message) => {
+    // comment in the logic
+    console.log(message);
+  };
+  // end Comment
+
+}));
+"
+`;
+
+exports[`rollup-plugin-gas > Should print each source filename to bandle file 2`] = `
+"
+var global = this;
+function includeTest() {};
+(function (factory) {
+  typeof define === 'function' && define.amd ? define(factory) :
+  factory();
+})((function () { 'use strict';
+
+  /*!**************!*\\\\
+    !*** foo.js ***!
+  \\\\*!**************!*/
+  global.excludeFunction = () => {
+    console.log(\\"excludeFunction\\");
+  };
+
+  const foo = function () {
+    console.log(\\"foo\\");
+  };
+
+  /*!*********************************!*\\\\
+    !*** include-comment-module.js ***!
+  \\\\*!*********************************!*/
+
+  global.includeTest = function () {
+    console.log(\\"includeTest\\");
+    foo();
+  };
+
+}));
+"
+`;
+
+exports[`rollup-plugin-gas > Should print logs when verbose option is used (exclude) 1`] = `
+"
+var global = this;
+function includeTest() {};
+(function (factory) {
+  typeof define === 'function' && define.amd ? define(factory) :
+  factory();
+})((function () { 'use strict';
+
+  global.excludeFunction = () => {
+    console.log(\\"excludeFunction\\");
+  };
+
+  const foo = function () {
+    console.log(\\"foo\\");
+  };
+
+  global.includeTest = function () {
+    console.log(\\"includeTest\\");
+    foo();
+  };
+
+}));
+"
+`;
+
+exports[`rollup-plugin-gas > Should print logs when verbose option is used 1`] = `
+"{
+  \\"timeZone\\": \\"Asia/Tokyo\\",
+  \\"dependencies\\": {},
+  \\"webapp\\": {
+    \\"access\\": \\"MYSELF\\",
+    \\"executeAs\\": \\"USER_ACCESSING\\"
+  },
+  \\"exceptionLogging\\": \\"STACKDRIVER\\",
+  \\"runtimeVersion\\": \\"V8\\"
+}
+"
+`;
