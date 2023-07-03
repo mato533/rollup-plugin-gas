@@ -1,9 +1,7 @@
 import path from "path";
-import fs from "fs";
 import pc from "picocolors";
 import { rollup } from "rollup";
 import type { OutputAsset } from "rollup";
-import { describe, expect, it } from "vitest";
 import rollupPluginGas from "../src";
 import type { RollupPluginGasOptions } from "types";
 import { manifest } from "@/plugin-manifest";
@@ -13,14 +11,13 @@ interface TestParams {
   dirFixtures: string;
 }
 
-const dirFixtures = path.resolve(__dirname, "./fixtures");
-const dirIncludeFixtures = path.resolve(__dirname, "./fixtures/include");
+const dirFixtures = path.resolve(__dirname, "./__fixtures__");
+const dirIncludeFixtures = path.resolve(dirFixtures, "include");
 
 const defineFixtureFileName = (param: TestParams) => {
   const { scenario, dirFixtures: dir } = param;
   const inputFile = path.join(dir, `${scenario}.js`);
-  const outputFile = path.join(dir, `${scenario}.bundle.js`);
-  return { inputFile, outputFile };
+  return inputFile;
 };
 
 const build = async (inputFile: string, options?: RollupPluginGasOptions) => {
@@ -36,26 +33,19 @@ const buildAndAssertOutput = async (
   param: TestParams,
   options?: RollupPluginGasOptions
 ) => {
-  const { inputFile, outputFile } = defineFixtureFileName(param);
+  const inputFile = defineFixtureFileName(param);
 
   const output = await build(inputFile, options);
 
   expect(output.output.length).toBe(1);
   const [{ code: generated }] = output.output;
-  const expected = fs.readFileSync(outputFile, {
-    encoding: "utf8",
-  });
-  expect(generated).toBe(expected);
+  expect(generated).toMatchSnapshot();
 };
 
 const buildAndAssertManifest = async (option: RollupPluginGasOptions) => {
-  const { inputFile } = defineFixtureFileName({
+  const inputFile = defineFixtureFileName({
     scenario: "basic",
     dirFixtures: dirFixtures,
-  });
-
-  const expected = fs.readFileSync(path.join(dirFixtures, manifest), {
-    encoding: "utf8",
   });
 
   const output = await build(inputFile, option);
@@ -63,7 +53,7 @@ const buildAndAssertManifest = async (option: RollupPluginGasOptions) => {
   const generatedManifest = output.output[1] as OutputAsset;
   expect(generatedManifest.type).toBe("asset");
   expect(generatedManifest.fileName).toBe(manifest);
-  expect(generatedManifest.source).toBe(expected);
+  expect(generatedManifest.source).toMatchSnapshot();
 };
 
 describe("rollup-plugin-gas", () => {
@@ -123,7 +113,7 @@ describe("rollup-plugin-gas", () => {
     vi.spyOn(process, "cwd").mockReturnValue(__dirname);
 
     await buildAndAssertManifest({
-      manifest: { copy: true, srcDir: "./fixtures" },
+      manifest: { copy: true, srcDir: "./__fixtures__" },
     });
   });
 
