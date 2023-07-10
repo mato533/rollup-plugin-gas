@@ -3,7 +3,7 @@ run-name: "Execute release tasks @${{ github.ref_name }}"
 on:
   push:
     branches:
-      - master
+      - main
     tags:
       - "!*"
 
