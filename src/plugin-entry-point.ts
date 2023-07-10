@@ -4,7 +4,7 @@ import type { Plugin } from "rollup";
 import { createFilter } from "rollup-pluginutils";
 import { generate } from "gas-entry-generator";
 import type { NotNullRollupPluginGasOptions } from "types";
-import { getRelativePath, log } from "@/plugin-utils";
+import { getRelativePath } from "@/plugin-utils";
 
 const generateChunckHeader = (code: string, id: string) => {
   const filename = basename(id);
@@ -20,19 +20,17 @@ const rollupPluginGasEntryPoint = (
 ): Plugin => {
   const entryPointFunctions: Array<string> = [];
   const filter = createFilter(configuratedOptions.include);
-  const logging = (message: string) => {
-    log(configuratedOptions.verbose, message);
-  };
   return {
     name: "rollup-plugin-gas-entry-point",
     outputOptions(options) {
       options.format = "umd"; // cjs
       return options;
     },
+
     transform(code, id) {
       if (id.slice(-5).toLowerCase() === ".json") return;
       if (!filter(id)) {
-        logging(
+        this.info(
           pc.gray("Excluded target: ") + pc.yellow(pc.bold(getRelativePath(id)))
         );
         if (configuratedOptions.moduleHeaderComment) {
@@ -41,8 +39,8 @@ const rollupPluginGasEntryPoint = (
           return;
         }
       }
-      logging(
-        pc.gray("Generated target: ") + pc.green(pc.bold(getRelativePath(id)))
+      this.info(
+        pc.gray("Generated entry points for: ") + pc.green(getRelativePath(id))
       );
       const gasCode = generate(code, { comment: configuratedOptions.comment });
       if (gasCode.entryPointFunctions) {
@@ -50,8 +48,11 @@ const rollupPluginGasEntryPoint = (
           /{\n}/g,
           "{};"
         );
-        codes.split("\n").forEach((code) => {
-          code && entryPointFunctions.push(`${code}`);
+        codes.split("\n").forEach((functionCode) => {
+          if (functionCode) {
+            this.debug("  -> " + functionCode);
+            entryPointFunctions.push(`${functionCode}`);
+          }
         });
       }
       if (configuratedOptions.moduleHeaderComment) {
