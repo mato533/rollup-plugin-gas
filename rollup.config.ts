@@ -57,7 +57,7 @@ const defineConfig = (pkg: Record<string, any>) => {
         targets: [{ src: "types/index.d.ts", dest: "dist/types" }],
         verbose: true,
       }),
-      del({ targets: "dist/*" }),
+      del({ targets: "dist/*", runOnce: true }),
     ],
   };
 };

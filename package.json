@@ -11,6 +11,7 @@
   },
   "types": "./dist/types/index.d.ts",
   "scripts": {
+    "dev": "yarn build -w",
     "lint": "eslint --ext .js,.ts ",
     "format": "prettier --check '**/*.{js,ts,json,md}'",
     "fix": "eslint --fix --ext .js,.ts && prettier --write '**/*.{js,ts,json,md}'",
