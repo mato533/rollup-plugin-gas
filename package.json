@@ -11,10 +11,10 @@
   },
   "types": "./dist/types/index.d.ts",
   "scripts": {
+    "dev": "yarn build -w",
     "lint": "eslint --ext .js,.ts ",
     "format": "prettier --check '**/*.{js,ts,json,md}'",
     "fix": "eslint --fix --ext .js,.ts && prettier --write '**/*.{js,ts,json,md}'",
-    "prebuild": "rm -rfv ./dist",
     "build": "tsc --noEmit && rollup --config rollup.config.ts --configPlugin typescript",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 && prettier --write CHANGELOG.md && git add CHANGELOG.md",
     "test": "vitest --run",
@@ -45,6 +45,7 @@
     }
   },
   "devDependencies": {
+    "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-typescript": "^11.1.1",
     "@typescript-eslint/eslint-plugin": "^5.59.8",
     "@typescript-eslint/parser": "^5.59.8",
@@ -55,6 +56,7 @@
     "prettier": "^2.8.8",
     "rollup": "^3.23.0",
     "rollup-plugin-copy": "^3.4.0",
+    "rollup-plugin-delete": "^2.0.0",
     "typescript": "5.1.6",
     "vitest": "^0.32.2"
   },
@@ -72,6 +74,8 @@
   "keywords": [
     "rollup",
     "plugin",
+    "rollup-plugin",
+    "Google Apps Script",
     "google-apps-scripts"
   ]
 }

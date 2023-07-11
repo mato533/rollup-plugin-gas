@@ -1,5 +1,7 @@
 import typescript from "@rollup/plugin-typescript";
 import copy from "rollup-plugin-copy";
+import del from "rollup-plugin-delete";
+import json from "@rollup/plugin-json";
 import { builtinModules } from "module";
 import { readFileSync } from "fs";
 import { Plugin, WarningHandlerWithDefault } from "rollup";
@@ -56,6 +58,8 @@ const defineConfig = (pkg: Record<string, any>) => {
         targets: [{ src: "types/index.d.ts", dest: "dist/types" }],
         verbose: true,
       }),
+      del({ targets: "dist/*", runOnce: true }),
+      json(),
     ],
   };
 };
