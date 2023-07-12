@@ -11,16 +11,33 @@
   },
   "types": "./dist/types/index.d.ts",
   "scripts": {
+    "postinstall": "simple-git-hooks",
     "dev": "yarn build -w",
-    "lint": "eslint --ext .js,.ts ",
-    "format": "prettier --check '**/*.{js,ts,json,md}'",
-    "fix": "eslint --fix --ext .js,.ts && prettier --write '**/*.{js,ts,json,md}'",
+    "format": "prettier --write --cache .",
+    "lint": "eslint --cache --cache-location node_modules/.cache/eslint/  --fix .",
     "build": "tsc --noEmit && rollup --config rollup.config.ts --configPlugin typescript",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 && prettier --write CHANGELOG.md && git add CHANGELOG.md",
     "test": "vitest --run",
     "test:ts": "tsc --noEmit",
     "coverage:ui": "vitest run --coverage && vite preview --outDir ./coverage",
     "coverage": "vitest run --coverage"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "yarn run lint-staged --concurrent false"
+  },
+  "lint-staged": {
+    "*": [
+      "prettier --write --cache --ignore-unknown"
+    ],
+    "{src,types}/**/*.ts": [
+      "eslint --cache --cache-location node_modules/.cache/eslint/ --fix"
+    ],
+    "**/*.d.ts": [
+      "eslint --cache --cache-location node_modules/.cache/eslint/ --fix"
+    ],
+    "tests/**/*.ts": [
+      "eslint --cache --cache-location node_modules/.cache/eslint/ --fix"
+    ]
   },
   "repository": {
     "type": "git",
@@ -53,9 +70,11 @@
     "conventional-changelog-cli": "^3.0.0",
     "eslint": "^8.41.0",
     "eslint-config-prettier": "^8.8.0",
+    "lint-staged": "^13.2.3",
     "prettier": "^3.0.0",
     "rollup": "^3.23.0",
     "rollup-plugin-copy": "^3.4.0",
+    "simple-git-hooks": "^2.8.1",
     "rollup-plugin-delete": "^2.0.0",
     "typescript": "5.1.6",
     "vitest": "^0.33.0"
