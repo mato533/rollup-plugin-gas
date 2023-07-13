@@ -92,17 +92,22 @@ jobs:
     name: Test & build
     needs:
       - prepare
-    runs-on: ubuntu-latest
-    if: ${{ needs.prepare.outputs.is_release > 0 }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node-version: [18.x]
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup node
+      - name: Setup node (${{ matrix.node-version }})
         uses: actions/setup-node@v3
         with:
-          node-version: "18.x"
+          node-version: ${{ matrix.node-version }}
           cache: "yarn"
+
       - name: Install dependencies
         run: yarn --frozen-lockfile
 
@@ -118,7 +123,9 @@ jobs:
   publish:
     name: Publish to the NPM registry
     needs:
+      - prepare
       - test
+    if: ${{ needs.prepare.outputs.is_release > 0 }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -149,9 +156,10 @@ jobs:
   coverage:
     name: Upload the coverage
     needs:
+      - prepare
       - test
+    if: ${{ needs.prepare.outputs.is_release > 0 }}
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -179,8 +187,8 @@ jobs:
     needs:
       - prepare
       - publish
+    if: ${{ needs.prepare.outputs.is_release > 0 }}
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
