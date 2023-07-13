@@ -1,5 +1,5 @@
-name: CD
-run-name: "Execute release tasks @${{ github.ref_name }}"
+name: CI/CD
+run-name: "CI/CD @${{ github.ref_name }}"
 on:
   push:
     branches:
