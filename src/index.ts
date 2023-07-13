@@ -14,6 +14,11 @@ const rollupPluginGas = (options?: RollupPluginGasOptions): Plugin => {
   const { generateBundle } = rollupPluginGasCopyManifest(configuratedOptions);
   return {
     name,
+    onLog() {
+      if (!configuratedOptions.verbose) {
+        return false;
+      }
+    },
     outputOptions,
     transform,
     banner,

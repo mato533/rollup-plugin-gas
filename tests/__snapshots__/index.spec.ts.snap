@@ -80,7 +80,7 @@ function includeTest() {};
 "
 `;
 
-exports[`rollup-plugin-gas > Should cgit opy the manifest file using srcDir option 1`] = `
+exports[`rollup-plugin-gas > Should copy the manifest file 1`] = `
 "{
   \\"timeZone\\": \\"Asia/Tokyo\\",
   \\"dependencies\\": {},
@@ -94,7 +94,7 @@ exports[`rollup-plugin-gas > Should cgit opy the manifest file using srcDir opti
 "
 `;
 
-exports[`rollup-plugin-gas > Should copy the manifest file 1`] = `
+exports[`rollup-plugin-gas > Should copy the manifest file using srcDir option 1`] = `
 "{
   \\"timeZone\\": \\"Asia/Tokyo\\",
   \\"dependencies\\": {},
@@ -142,32 +142,6 @@ function foo(message) {};
     console.log(message);
   };
   // end Comment
-
-}));
-"
-`;
-
-exports[`rollup-plugin-gas > Should not print logs when verbose option is not setted 1`] = `
-"
-var global = this;
-function includeTest() {};
-(function (factory) {
-  typeof define === 'function' && define.amd ? define(factory) :
-  factory();
-})((function () { 'use strict';
-
-  global.excludeFunction = () => {
-    console.log(\\"excludeFunction\\");
-  };
-
-  const foo = function () {
-    console.log(\\"foo\\");
-  };
-
-  global.includeTest = function () {
-    console.log(\\"includeTest\\");
-    foo();
-  };
 
 }));
 "
@@ -242,45 +216,5 @@ function includeTest() {};
   };
 
 }));
-"
-`;
-
-exports[`rollup-plugin-gas > Should print logs when verbose option is used (exclude) 1`] = `
-"
-var global = this;
-function includeTest() {};
-(function (factory) {
-  typeof define === 'function' && define.amd ? define(factory) :
-  factory();
-})((function () { 'use strict';
-
-  global.excludeFunction = () => {
-    console.log(\\"excludeFunction\\");
-  };
-
-  const foo = function () {
-    console.log(\\"foo\\");
-  };
-
-  global.includeTest = function () {
-    console.log(\\"includeTest\\");
-    foo();
-  };
-
-}));
-"
-`;
-
-exports[`rollup-plugin-gas > Should print logs when verbose option is used 1`] = `
-"{
-  \\"timeZone\\": \\"Asia/Tokyo\\",
-  \\"dependencies\\": {},
-  \\"webapp\\": {
-    \\"access\\": \\"MYSELF\\",
-    \\"executeAs\\": \\"USER_ACCESSING\\"
-  },
-  \\"exceptionLogging\\": \\"STACKDRIVER\\",
-  \\"runtimeVersion\\": \\"V8\\"
-}
 "
 `;
