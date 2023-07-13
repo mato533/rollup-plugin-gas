@@ -1,5 +1,4 @@
 import path from "path";
-import pc from "picocolors";
 import { rollup } from "rollup";
 import type { OutputAsset } from "rollup";
 import rollupPluginGas from "../src";
