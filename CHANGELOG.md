@@ -1,3 +1,13 @@
+## [1.1.8](https://github.com/mato533/rollup-plugin-gas/compare/v1.1.7...v1.1.8) (2023-07-13)
+
+### Bug Fixes
+
+- Update plugin name as the name of NPM Package ([d703c07](https://github.com/mato533/rollup-plugin-gas/commit/d703c072ab181399bde315075a0a8fb1680f562f))
+
+### Features
+
+- Support Rollup logging Functions ([3d26495](https://github.com/mato533/rollup-plugin-gas/commit/3d26495d31887ed519fd9d02c84f8dd5220d99dc))
+
 ## [1.1.7](https://github.com/mato533/rollup-plugin-gas/compare/v1.1.6...v1.1.7) (2023-07-03)
 
 ## [1.1.6](https://github.com/mato533/rollup-plugin-gas/compare/v1.1.5...v1.1.6) (2023-06-25)
