@@ -5,6 +5,7 @@ export default defineConfig({
   test: {
     globals: true,
     silent: true,
+    reporters: "verbose",
   },
   resolve: {
     alias: {
