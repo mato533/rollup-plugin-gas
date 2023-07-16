@@ -10,7 +10,8 @@ interface TestParams {
   dirFixtures: string;
 }
 
-const dirFixtures = path.resolve(__dirname, "./__fixtures__");
+const dirnameFixtures = "./__fixtures__";
+const dirFixtures = path.resolve(__dirname, dirnameFixtures);
 const dirIncludeFixtures = path.resolve(dirFixtures, "include");
 
 const defineFixtureFileName = (param: TestParams) => {
@@ -19,10 +20,13 @@ const defineFixtureFileName = (param: TestParams) => {
   return inputFile;
 };
 
-const build = async (inputFile: string, options?: RollupPluginGasOptions) => {
+const build = async (param: TestParams, options?: RollupPluginGasOptions) => {
+  const inputFile = defineFixtureFileName(param);
+
   const bundle = await rollup({
     input: inputFile,
     plugins: [rollupPluginGas(options)],
+    logLevel: "info",
   });
 
   return await bundle.generate({});
@@ -32,9 +36,7 @@ const buildAndAssertOutput = async (
   param: TestParams,
   options?: RollupPluginGasOptions
 ) => {
-  const inputFile = defineFixtureFileName(param);
-
-  const output = await build(inputFile, options);
+  const output = await build(param, options);
 
   expect(output.output.length).toBe(1);
   const [{ code: generated }] = output.output;
@@ -42,12 +44,10 @@ const buildAndAssertOutput = async (
 };
 
 const buildAndAssertManifest = async (option: RollupPluginGasOptions) => {
-  const inputFile = defineFixtureFileName({
-    scenario: "basic",
-    dirFixtures: dirFixtures,
-  });
-
-  const output = await build(inputFile, option);
+  const output = await build(
+    { scenario: "basic", dirFixtures: dirFixtures },
+    option
+  );
   expect(output.output.length).toBe(2);
   const generatedManifest = output.output[1] as OutputAsset;
   expect(generatedManifest.type).toBe("asset");
@@ -56,6 +56,10 @@ const buildAndAssertManifest = async (option: RollupPluginGasOptions) => {
 };
 
 describe("rollup-plugin-gas", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it.each(["basic", "allow-function"])(
     "Should add entry point function to the bandle file #%s",
     async (scenario) => {
@@ -112,7 +116,7 @@ describe("rollup-plugin-gas", () => {
     vi.spyOn(process, "cwd").mockReturnValue(__dirname);
 
     await buildAndAssertManifest({
-      manifest: { copy: true, srcDir: "./__fixtures__" },
+      manifest: { copy: true, srcDir: dirnameFixtures },
     });
   });
 });
