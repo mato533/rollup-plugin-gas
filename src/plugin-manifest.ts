@@ -1,4 +1,4 @@
-import { readFileSync } from "fs";
+import { existsSync, readFileSync } from "fs";
 import { join } from "path";
 import type { Plugin } from "rollup";
 import pc from "picocolors";
@@ -27,6 +27,10 @@ const rollupPluginGasCopyManifest = (
         pc.gray("Copy the manifest from: ") +
           pc.green(getRelativePath(sourceFile))
       );
+
+      if (!existsSync(sourceFile)) {
+        this.error("Manifest file is not exist: " + sourceFile);
+      }
       this.emitFile({
         type: "asset",
         name: "manifest",
