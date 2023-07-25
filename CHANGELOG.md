@@ -1,4 +1,10 @@
-## [1.1.9](https://github.com/mato533/rollup-plugin-gas/compare/v1.1.8...v1.1.9) (2023-07-16)
+## [1.1.10](https://github.com/mato533/rollup-plugin-gas/compare/v1.1.9...v1.1.10) (2023-07-26)
+
+### Bug Fixes
+
+- fix wrong version for rollup of peerDependencies ([00554f3](https://github.com/mato533/rollup-plugin-gas/commit/00554f33f69faee10e535d5fae1745dc1da4e231))
+
+## [1.1.9](https://github.com/mato533/rollup-plugin-gas/compare/v1.1.8...v1.1.9) (2023-07-17)
 
 ## [1.1.8](https://github.com/mato533/rollup-plugin-gas/compare/v1.1.7...v1.1.8) (2023-07-13)
 
