@@ -119,4 +119,12 @@ describe("rollup-plugin-gas", () => {
       manifest: { copy: true, srcDir: dirnameFixtures },
     });
   });
+
+  it("Should throw error when the manifest file is not exitsted", async () => {
+    expect(async () => {
+      await buildAndAssertManifest({
+        manifest: { copy: true, srcDir: "dummy" },
+      });
+    }).rejects.toThrowError();
+  });
 });
