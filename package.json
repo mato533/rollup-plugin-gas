@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-google-apps-script",
-  "version": "1.1.10",
+  "version": "1.1.11",
   "description": "Rollup plugin for Google Apps Script.",
   "main": "./dist/cjs/index.js",
   "module": "./dist/es/index.js",
@@ -11,7 +11,6 @@
   },
   "types": "./dist/types/index.d.ts",
   "scripts": {
-    "postinstall": "simple-git-hooks",
     "dev": "yarn build -w",
     "format": "prettier --write --cache .",
     "lint": "eslint --cache --cache-location node_modules/.cache/eslint/  --fix .",
