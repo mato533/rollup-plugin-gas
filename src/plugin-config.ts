@@ -1,8 +1,8 @@
 import { join } from "path";
 import type {
-  RollupPluginGasOptions,
-  PluginOptions,
   FuncPluginConfig,
+  PluginOptions,
+  RollupPluginGasOptions,
 } from "types";
 
 const getPluginSettings = <T extends PluginOptions>(

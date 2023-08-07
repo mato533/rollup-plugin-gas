@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from "fs";
 import { join } from "path";
-import type { Plugin } from "rollup";
 import pc from "picocolors";
+import type { Plugin } from "rollup";
 import type { NotNullRollupPluginGasOptions } from "types";
 import { getRelativePath } from "@/plugin-utils";
 

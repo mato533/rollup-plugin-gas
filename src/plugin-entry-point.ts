@@ -1,8 +1,8 @@
-import pc from "picocolors";
 import { basename } from "path";
-import type { Plugin } from "rollup";
+import pc from "picocolors";
 import { createFilter } from "rollup-pluginutils";
 import { generate } from "gas-entry-generator";
+import type { Plugin } from "rollup";
 import type { NotNullRollupPluginGasOptions } from "types";
 import { getRelativePath } from "@/plugin-utils";
 

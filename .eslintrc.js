@@ -16,11 +16,27 @@ module.exports = {
     ecmaVersion: "latest",
     sourceType: "module",
   },
-  plugins: ["@typescript-eslint"],
+  plugins: ["@typescript-eslint", "import"],
   rules: {
     indent: ["error", 2],
     "linebreak-style": ["error", "unix"],
     quotes: ["error", "double", { allowTemplateLiterals: true }],
     semi: ["error", "always"],
+    "import/order": [
+      "error",
+      {
+        groups: [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index",
+          "object",
+          "type",
+        ],
+      },
+    ],
+    "import/no-duplicates": ["error"],
   },
 };

@@ -1,7 +1,7 @@
 import path from "path";
 import { rollup } from "rollup";
-import type { OutputAsset } from "rollup";
 import rollupPluginGas from "../src";
+import type { OutputAsset } from "rollup";
 import type { RollupPluginGasOptions } from "types";
 import { manifest } from "@/plugin-manifest";
 
