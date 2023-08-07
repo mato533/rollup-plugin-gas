@@ -1,3 +1,9 @@
+## [1.1.11](https://github.com/mato533/rollup-plugin-gas/compare/v1.1.10...v1.1.11) (2023-08-07)
+
+### Bug Fixes
+
+- remove postinstall script ([648212f](https://github.com/mato533/rollup-plugin-gas/commit/648212fa7102a901b7a9e290948815d3deaae69c))
+
 ## [1.1.10](https://github.com/mato533/rollup-plugin-gas/compare/v1.1.9...v1.1.10) (2023-07-26)
 
 ### Bug Fixes
