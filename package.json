@@ -42,6 +42,7 @@
     "type": "git",
     "url": "git+https://github.com/mato533/rollup-plugin-gas.git"
   },
+  "packageManager": "pnpm@8.6.12",
   "author": "Taiki Abe <taiki.abe@ymail.ne.jp>",
   "license": "MIT",
   "bugs": {
