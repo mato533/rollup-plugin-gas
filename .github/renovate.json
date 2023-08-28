@@ -4,7 +4,7 @@
     "config:base",
     "schedule:weekly",
     "group:allNonMajor",
-    ":dependencyDashboard"
+    ":disableDependencyDashboard"
   ],
   "prHourlyLimit": 0,
   "prConcurrentLimit": 10,
