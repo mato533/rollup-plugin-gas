@@ -6,7 +6,7 @@
     ":disableDependencyDashboard",
     ":timezone(Asia/Tokyo)"
   ],
-  "schedule": ["before 4am on the sunday"],
+  "schedule": ["before 4am on sunday"],
   "prHourlyLimit": 0,
   "prConcurrentLimit": 10,
   "branchConcurrentLimit": 10,
