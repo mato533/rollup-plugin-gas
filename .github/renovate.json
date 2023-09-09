@@ -2,14 +2,37 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:base",
-    "schedule:weekly",
     "group:allNonMajor",
     ":disableDependencyDashboard"
+    ":timezone(Asia/Tokyo)",
   ],
+  "schedule": ["before 4am on the sunday"],
   "prHourlyLimit": 0,
   "prConcurrentLimit": 10,
   "branchConcurrentLimit": 10,
   "automerge": true,
+  "packageRules": [{
+    "packagePatterns": ["eslint"],
+    "groupName": "lint",
+    "automerge": true,
+    "automergeType": "branch"
+  }, {
+    "packagePatterns": ["^@mathigon"],
+    "schedule": ["at any time"],
+    "groupName": "mathigon",
+    "automerge": true,
+    "automergeType": "branch"
+  }, {
+    "packagePatterns": ["ts-node", "^typescript"],
+    "groupName": "typescript",
+    "automerge": true,
+    "automergeType": "branch"
+  }, {
+    "packagePatterns": ["^@types/"],
+    "groupName": "types",
+    "automerge": true,
+    "automergeType": "branch"
+  }],
   "major": {
     "automerge": false
   }
