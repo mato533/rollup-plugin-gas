@@ -24,7 +24,7 @@ jobs:
       app_version_text: ${{ steps.identify-version.outputs.app_version_text }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 2
       - name: Setup node
@@ -99,7 +99,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup node (${{ matrix.node-version }})
         uses: actions/setup-node@v3
@@ -131,7 +131,7 @@ jobs:
       id-token: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup node
         uses: actions/setup-node@v3
@@ -161,7 +161,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup node
         uses: actions/setup-node@v3
@@ -190,7 +190,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup node
         uses: actions/setup-node@v3
