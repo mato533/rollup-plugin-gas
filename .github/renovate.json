@@ -3,8 +3,8 @@
   "extends": [
     "config:base",
     "group:allNonMajor",
-    ":disableDependencyDashboard"
-    ":timezone(Asia/Tokyo)",
+    ":disableDependencyDashboard",
+    ":timezone(Asia/Tokyo)"
   ],
   "schedule": ["before 4am on the sunday"],
   "prHourlyLimit": 0,
