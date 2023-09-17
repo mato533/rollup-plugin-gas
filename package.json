@@ -11,7 +11,7 @@
   },
   "types": "./dist/types/index.d.ts",
   "scripts": {
-    "dev": "yarn build -w",
+    "dev": "pnp build -w",
     "format": "prettier --write --cache .",
     "lint": "eslint --cache --cache-location node_modules/.cache/eslint/  --fix .",
     "build": "tsc --noEmit && rollup --config rollup.config.ts --configPlugin typescript",
@@ -21,6 +21,7 @@
     "coverage:ui": "vitest run --coverage && vite preview --outDir ./coverage",
     "coverage": "vitest run --coverage"
   },
+  "packageManager": "pnpm@8.7.4",
   "simple-git-hooks": {
     "pre-commit": "yarn run lint-staged --concurrent false"
   },

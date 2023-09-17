@@ -6,11 +6,13 @@
     ":disableDependencyDashboard",
     ":timezone(Asia/Tokyo)"
   ],
+  "rangeStrategy": "bump",
   "schedule": ["before 4am on sunday"],
   "prHourlyLimit": 0,
   "prConcurrentLimit": 10,
   "branchConcurrentLimit": 10,
   "automerge": true,
+  "platformAutomerge": true,
   "packageRules": [{
     "packagePatterns": ["eslint"],
     "groupName": "lint",
