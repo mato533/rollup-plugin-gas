@@ -13,28 +13,28 @@
   "branchConcurrentLimit": 10,
   "automerge": true,
   "platformAutomerge": true,
-  "packageRules": [{
-    "packagePatterns": ["eslint"],
-    "groupName": "lint",
-    "automerge": true,
-    "automergeType": "branch"
-  }, {
-    "packagePatterns": ["^@mathigon"],
-    "schedule": ["at any time"],
-    "groupName": "mathigon",
-    "automerge": true,
-    "automergeType": "branch"
-  }, {
-    "packagePatterns": ["ts-node", "^typescript"],
-    "groupName": "typescript",
-    "automerge": true,
-    "automergeType": "branch"
-  }, {
-    "packagePatterns": ["^@types/"],
-    "groupName": "types",
-    "automerge": true,
-    "automergeType": "branch"
-  }],
+  "packageRules": [
+    {
+      "packagePatterns": ["eslint", "prettier"],
+      "groupName": "lint & format"
+    },
+    {
+      "packagePatterns": ["rollup"],
+      "groupName": "rollup"
+    },
+    {
+      "packagePatterns": ["ts-node", "^typescript"],
+      "groupName": "typescript"
+    },
+    {
+      "packagePatterns": ["^@types/"],
+      "groupName": "types"
+    },
+    {
+      "enabled": false,
+      "matchDepTypes": ["peerDependencies"]
+    }
+  ],
   "major": {
     "automerge": false
   }

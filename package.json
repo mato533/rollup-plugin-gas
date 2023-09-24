@@ -50,7 +50,7 @@
   },
   "homepage": "https://github.com/mato533/rollup-plugin-gas#readme",
   "peerDependencies": {
-    "rollup": "^3.29.2",
+    "rollup": "^3.25.0",
     "vite": "^4.4.9"
   },
   "peerDependenciesMeta": {
