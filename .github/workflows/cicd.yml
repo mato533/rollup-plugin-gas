@@ -100,7 +100,7 @@ jobs:
         uses: pnpm/action-setup@v2.4.0
 
       - name: Setup node (${{ matrix.node-version }})
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: "pnpm"
@@ -135,7 +135,7 @@ jobs:
         uses: pnpm/action-setup@v2.4.0
 
       - name: Setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "18.x"
           cache: "pnpm"
@@ -168,7 +168,7 @@ jobs:
         uses: pnpm/action-setup@v2.4.0
 
       - name: Setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "18.x"
           cache: "pnpm"
