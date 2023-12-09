@@ -21,7 +21,7 @@
     "coverage:ui": "vitest run --coverage && vite preview --outDir ./coverage",
     "coverage": "vitest run --coverage"
   },
-  "packageManager": "pnpm@8.11.0",
+  "packageManager": "pnpm@8.12.0",
   "simple-git-hooks": {
     "pre-commit": "yarn run lint-staged --concurrent false"
   },
@@ -72,7 +72,7 @@
     "eslint": "^8.55.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.0",
-    "lint-staged": "^15.1.0",
+    "lint-staged": "^15.2.0",
     "prettier": "^3.1.0",
     "rollup": "^4.6.1",
     "rollup-plugin-copy": "^3.5.0",
