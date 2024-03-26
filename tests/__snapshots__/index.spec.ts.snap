@@ -10,7 +10,7 @@ function basic() {};
 })((function () { 'use strict';
 
   global.basic = () => {
-    console.log(\\"test\\");
+    console.log("test");
   };
 
 }));
@@ -39,7 +39,7 @@ function minus() {};
   global.echo = echo;
 
   global.hello = function () {
-    console.log(\\"hello\\");
+    console.log("hello");
   };
 
   function plus(x, y) {
@@ -64,15 +64,15 @@ function includeTest() {};
 })((function () { 'use strict';
 
   global.excludeFunction = () => {
-    console.log(\\"excludeFunction\\");
+    console.log("excludeFunction");
   };
 
   const foo = function () {
-    console.log(\\"foo\\");
+    console.log("foo");
   };
 
   global.includeTest = function () {
-    console.log(\\"includeTest\\");
+    console.log("includeTest");
     foo();
   };
 
@@ -82,28 +82,28 @@ function includeTest() {};
 
 exports[`rollup-plugin-gas > Should copy the manifest file 1`] = `
 "{
-  \\"timeZone\\": \\"Asia/Tokyo\\",
-  \\"dependencies\\": {},
-  \\"webapp\\": {
-    \\"access\\": \\"MYSELF\\",
-    \\"executeAs\\": \\"USER_ACCESSING\\"
+  "timeZone": "Asia/Tokyo",
+  "dependencies": {},
+  "webapp": {
+    "access": "MYSELF",
+    "executeAs": "USER_ACCESSING"
   },
-  \\"exceptionLogging\\": \\"STACKDRIVER\\",
-  \\"runtimeVersion\\": \\"V8\\"
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8"
 }
 "
 `;
 
 exports[`rollup-plugin-gas > Should copy the manifest file using srcDir option 1`] = `
 "{
-  \\"timeZone\\": \\"Asia/Tokyo\\",
-  \\"dependencies\\": {},
-  \\"webapp\\": {
-    \\"access\\": \\"MYSELF\\",
-    \\"executeAs\\": \\"USER_ACCESSING\\"
+  "timeZone": "Asia/Tokyo",
+  "dependencies": {},
+  "webapp": {
+    "access": "MYSELF",
+    "executeAs": "USER_ACCESSING"
   },
-  \\"exceptionLogging\\": \\"STACKDRIVER\\",
-  \\"runtimeVersion\\": \\"V8\\"
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8"
 }
 "
 `;
@@ -157,16 +157,16 @@ function foo(message) {};
   factory();
 })((function () { 'use strict';
 
-  /*!***************!*\\\\
+  /*!***************!*\\
     !*** echo.js ***!
-  \\\\*!***************!*/
+  \\*!***************!*/
   const echo = (message) => {
     return message;
   };
 
-  /*!*************************!*\\\\
+  /*!*************************!*\\
     !*** comment-module.js ***!
-  \\\\*!*************************!*/
+  \\*!*************************!*/
   // header comment
   /**
    * Comment for echo
@@ -195,23 +195,23 @@ function includeTest() {};
   factory();
 })((function () { 'use strict';
 
-  /*!**************!*\\\\
+  /*!**************!*\\
     !*** foo.js ***!
-  \\\\*!**************!*/
+  \\*!**************!*/
   global.excludeFunction = () => {
-    console.log(\\"excludeFunction\\");
+    console.log("excludeFunction");
   };
 
   const foo = function () {
-    console.log(\\"foo\\");
+    console.log("foo");
   };
 
-  /*!*********************************!*\\\\
+  /*!*********************************!*\\
     !*** include-comment-module.js ***!
-  \\\\*!*********************************!*/
+  \\*!*********************************!*/
 
   global.includeTest = function () {
-    console.log(\\"includeTest\\");
+    console.log("includeTest");
     foo();
   };
 
