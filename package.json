@@ -21,7 +21,7 @@
     "coverage:ui": "vitest run --coverage && vite preview --outDir ./coverage",
     "coverage": "vitest run --coverage"
   },
-  "packageManager": "pnpm@9.0.6",
+  "packageManager": "pnpm@9.1.0",
   "simple-git-hooks": {
     "pre-commit": "yarn run lint-staged --concurrent false"
   },
