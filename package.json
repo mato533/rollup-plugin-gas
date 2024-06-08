@@ -21,7 +21,7 @@
     "coverage:ui": "vitest run --coverage && vite preview --outDir ./coverage",
     "coverage": "vitest run --coverage"
   },
-  "packageManager": "pnpm@9.1.4",
+  "packageManager": "pnpm@9.2.0",
   "simple-git-hooks": {
     "pre-commit": "yarn run lint-staged --concurrent false"
   },
@@ -78,7 +78,7 @@
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-delete": "^2.0.0",
     "simple-git-hooks": "^2.11.1",
-    "tslib": "^2.6.2",
+    "tslib": "^2.6.3",
     "typescript": "5.4.5",
     "vitest": "^1.6.0"
   },
