@@ -67,7 +67,7 @@
     "@types/node": "^20.14.14",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
-    "@vitest/coverage-v8": "^1.6.0",
+    "@vitest/coverage-v8": "^2.0.5",
     "conventional-changelog-cli": "^5.0.0",
     "eslint": "^9.8.0",
     "eslint-config-prettier": "^9.1.0",
@@ -80,7 +80,7 @@
     "simple-git-hooks": "^2.11.1",
     "tslib": "^2.6.3",
     "typescript": "5.5.4",
-    "vitest": "^1.6.0"
+    "vitest": "^2.0.5"
   },
   "dependencies": {
     "gas-entry-generator": "^2.6.0",
