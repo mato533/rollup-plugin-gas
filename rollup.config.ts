@@ -7,7 +7,6 @@ import json from "@rollup/plugin-json";
 import { Plugin, WarningHandlerWithDefault } from "rollup";
 
 const onwarn: WarningHandlerWithDefault = (warning) => {
-  // eslint-disable-next-line no-console
   console.error(
     "Building Rollup produced warnings that need to be resolved. " +
       "Please keep in mind that the browser build may never have external dependencies!"
