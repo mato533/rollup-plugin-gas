@@ -1,9 +1,13 @@
-import path from "path";
+import path from "node:path";
+
 import { rollup } from "rollup";
+
+import { manifest } from "@/plugin-manifest";
+
 import rollupPluginGas from "../src";
+
 import type { OutputAsset } from "rollup";
 import type { RollupPluginGasOptions } from "types";
-import { manifest } from "@/plugin-manifest";
 
 interface TestParams {
   scenario: string;

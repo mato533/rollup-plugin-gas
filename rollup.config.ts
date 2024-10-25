@@ -1,10 +1,12 @@
-import { builtinModules } from "module";
-import { readFileSync } from "fs";
+import { builtinModules } from "node:module";
+import { readFileSync } from "node:fs";
+
 import typescript from "@rollup/plugin-typescript";
 import copy from "rollup-plugin-copy";
 import del from "rollup-plugin-delete";
 import json from "@rollup/plugin-json";
-import { Plugin, WarningHandlerWithDefault } from "rollup";
+
+import type { Plugin, WarningHandlerWithDefault } from "rollup";
 
 const onwarn: WarningHandlerWithDefault = (warning) => {
   console.error(

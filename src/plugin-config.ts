@@ -1,4 +1,5 @@
-import { join } from "path";
+import { join } from "node:path";
+
 import type {
   FuncPluginConfig,
   PluginOptions,
