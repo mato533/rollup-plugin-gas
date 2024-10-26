@@ -77,7 +77,7 @@ describe("rollup-plugin-gas", () => {
   it("Should include comments", async () => {
     await buildAndAssertOutput(
       { scenario: "comment", dirFixtures: dirFixtures },
-      { comment: true }
+      { gasEntryOptions: { comment: true } }
     );
   });
 
