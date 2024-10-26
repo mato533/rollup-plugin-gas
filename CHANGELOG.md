@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.0.0] - 2024-10-26
+## [2.0.1] - 2024-10-26
 
 ### 🚀 Features
 
@@ -18,6 +18,12 @@ All notable changes to this project will be documented in this file.
 - Update eslint rule ([#292](https://github.com/mato533/rollup-plugin-gas/issues/292))
 - Migrate from `conventional-changelog` to `git-cliff` ([#294](https://github.com/mato533/rollup-plugin-gas/issues/294))
 - Update yaml configrations for ci/cd ([#295](https://github.com/mato533/rollup-plugin-gas/issues/295))
+- Update ci/cd workflows ([#298](https://github.com/mato533/rollup-plugin-gas/issues/298))
+- Update config related workflow ([#299](https://github.com/mato533/rollup-plugin-gas/issues/299))
+
+### Release
+
+- V2.0.0
 
 ## [1.1.14] - 2024-09-14
 
