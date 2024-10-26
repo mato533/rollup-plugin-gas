@@ -56,7 +56,7 @@ jobs:
         id: check-commit-msg
         run: |
           echo 'Start the release process when the commit message contains the string "release" and the version value in package.json'
-          COMMIT_MSG="${{ github.event.head_commit.message }}"
+          COMMIT_MSG='${{ github.event.head_commit.message }}'
           COMMIT_MSG_LOW="$(echo "${COMMIT_MSG,,}")"
           COUNT_RELEASE="$(echo "${COMMIT_MSG_LOW}" | grep "release" | wc -l)"
           COUNT_VERSION="$(echo "${COMMIT_MSG_LOW}" | grep "${{steps.identify-version.outputs.app_version}}" | wc -l)"
