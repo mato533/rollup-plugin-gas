@@ -17,7 +17,7 @@
     "build": "tsc --noEmit && rollup --config rollup.config.ts --configPlugin typescript",
     "changelog": "git-cliff -o CHANGELOG.md",
     "test": "vitest --run",
-    "test:ts": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
     "coverage:ui": "vitest run --coverage && vite preview --outDir ./coverage",
     "coverage": "vitest run --coverage"
   },
