@@ -1,9 +1,12 @@
 import { existsSync, readFileSync } from "fs";
 import { join } from "path";
+
 import pc from "picocolors";
+
+import { getRelativePath } from "@/plugin-utils";
+
 import type { Plugin } from "rollup";
 import type { NotNullRollupPluginGasOptions } from "types";
-import { getRelativePath } from "@/plugin-utils";
 
 export const manifest = "appsscript.json";
 

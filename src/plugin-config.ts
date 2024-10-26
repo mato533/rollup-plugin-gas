@@ -1,4 +1,5 @@
 import { join } from "path";
+
 import type {
   FuncPluginConfig,
   PluginOptions,

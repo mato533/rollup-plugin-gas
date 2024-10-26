@@ -1,10 +1,13 @@
 import { basename } from "path";
+
 import pc from "picocolors";
 import { createFilter } from "rollup-pluginutils";
 import { generate } from "gas-entry-generator";
+
+import { getRelativePath } from "@/plugin-utils";
+
 import type { Plugin } from "rollup";
 import type { NotNullRollupPluginGasOptions } from "types";
-import { getRelativePath } from "@/plugin-utils";
 
 const generateChunckHeader = (code: string, id: string) => {
   const filename = basename(id);
