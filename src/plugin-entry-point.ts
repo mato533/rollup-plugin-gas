@@ -2,9 +2,8 @@ import { basename } from "path";
 
 import pc from "picocolors";
 import { createFilter } from "rollup-pluginutils";
-import { generate } from "gas-entry-generator";
 
-import { getRelativePath } from "@/plugin-utils";
+import { getRelativePath, generateEntry } from "@/plugin-utils";
 
 import type { Plugin } from "rollup";
 import type { NotNullRollupPluginGasOptions } from "types";
@@ -45,7 +44,7 @@ const rollupPluginGasEntryPoint = (
       this.info(
         pc.gray("Generated entry points for: ") + pc.green(getRelativePath(id))
       );
-      const gasCode = generate(code, { comment: configuratedOptions.comment });
+      const gasCode = generateEntry(code, configuratedOptions.gasEntryOptions);
       if (gasCode.entryPointFunctions) {
         const codes = String(gasCode.entryPointFunctions).replace(
           /{\n}/g,

@@ -3,28 +3,47 @@ export interface ManifestOptions {
   srcDir?: string;
 }
 
-export interface RollupPluginGasOptions {
+export interface GasEntryOptions {
   comment?: boolean;
+  autoGlobalExports?: boolean;
+  exportsIdentifierName?: string;
+  globalIdentifierName?: string;
+}
+export interface DefaultGasEntryOptions {
+  comment: boolean;
+  autoGlobalExports?: boolean;
+  exportsIdentifierName?: string;
+  globalIdentifierName?: string;
+}
+
+export interface RollupPluginGasOptions {
   include?: Array<string>;
   moduleHeaderComment?: boolean;
   manifest?: ManifestOptions;
+  gasEntryOptions?: GasEntryOptions;
   verbose?: boolean;
 }
 
-type DeepRequired<T> = {
-  [K in keyof T]-?: Required<DeepRequired<T[K]>>;
+export type NotNullRollupPluginGasOptions = {
+  include: Array<string>;
+  moduleHeaderComment: boolean;
+  manifest: Required<ManifestOptions>;
+  gasEntryOptions: DefaultGasEntryOptions;
+  verbose: boolean;
 };
 
-export type NotNullRollupPluginGasOptions =
-  DeepRequired<RollupPluginGasOptions>;
+export type NotNullManifestOptions = Required<ManifestOptions>;
 
-export type NotNullManifestOptions = DeepRequired<ManifestOptions>;
-
-export type PluginOptions = RollupPluginGasOptions | ManifestOptions;
+export type PluginOptions =
+  | RollupPluginGasOptions
+  | ManifestOptions
+  | GasEntryOptions;
 
 export type FuncPluginConfig<T> = T extends RollupPluginGasOptions
   ? NotNullRollupPluginGasOptions
-  : NotNullManifestOptions;
+  : T extends GasEntryOptions
+    ? DefaultGasEntryOptions
+    : NotNullManifestOptions;
 
 export default function rollupPluginGas(
   options?: RollupPluginGasOptions
