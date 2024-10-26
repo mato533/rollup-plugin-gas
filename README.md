@@ -1,7 +1,7 @@
 # rollup-plugin-google-apps-script
 
 [![npm version](https://badge.fury.io/js/rollup-plugin-google-apps-script.svg)](https://badge.fury.io/js/rollup-plugin-google-apps-script)
-[![CI/CD](https://github.com/mato533/rollup-plugin-gas/actions/workflows/cicd.yml/badge.svg)](https://github.com/mato533/rollup-plugin-gas/actions/workflows/cicd.yml)
+[![CI](https://github.com/mato533/rollup-plugin-gas/actions/workflows/test.yml/badge.svg)](https://github.com/mato533/rollup-plugin-gas/actions/workflows/test.yml)
 [![codecov](https://codecov.io/gh/mato533/rollup-plugin-gas/branch/main/graph/badge.svg?token=50Z04K2PVN)](https://codecov.io/gh/mato533/rollup-plugin-gas)
 [![CodeFactor](https://www.codefactor.io/repository/github/mato533/rollup-plugin-gas/badge)](https://www.codefactor.io/repository/github/mato533/rollup-plugin-gas)
 [![GitHub](https://img.shields.io/github/license/mato533/rollup-plugin-gas)](https://github.com/mato533/rollup-plugin-gas/blob/main/LICENSE)
