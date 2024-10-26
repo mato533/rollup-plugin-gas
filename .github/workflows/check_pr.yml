@@ -1,0 +1,201 @@
+name: Check tasks for pull request
+on:
+  workflow_call:
+    secrets:
+      private-key:
+        required: true
+    outputs:
+      is-updated:
+        description: "return 1 when Something was changed, otherwise 0"
+        value: ${{ jobs.update-source-code.outputs.is-updated }}
+
+env:
+  GH_EMAIL: "41898282+github-actions[bot]@users.noreply.github.com"
+  GH_USER: "github-actions[bot]"
+
+jobs:
+  get-version:
+    name: Get version to be released
+    runs-on: ubuntu-latest
+    if: ${{ startsWith(github.head_ref, 'release/') }}
+    outputs:
+      app-version: ${{ steps.get-version.outputs.app-version }}
+    steps:
+      - name: Get version to be released
+        id: get-version
+        run: |
+          BRANCH_NAME="${{ github.head_ref }}"
+          APP_VERSION_TEXT=${BRANCH_NAME##*/}
+          APP_VERSION="$(echo "${APP_VERSION_TEXT}"| grep -o -E "([0-9]+\.){1}[0-9]+(\.[0-9]+)?")"
+          echo "app-version-text=${APP_VERSION_TEXT}" >>"${GITHUB_OUTPUT}"
+          echo "app-version=${APP_VERSION}" >>"${GITHUB_OUTPUT}"
+
+          echo "detected version: ${APP_VERSION}"
+
+  update-source-code:
+    name: Format and lint
+    runs-on: ubuntu-latest
+    needs:
+      - get-version
+    if: ${{ !cancelled() && !failure() }}
+    outputs:
+      is-updated: ${{ steps.result.outputs.is-updated }}
+    env:
+      VAR_NAME_FOR_CHANGED: done-change
+    steps:
+      - uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          # required
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.private-key }}
+          owner: ${{ github.repository_owner }}
+
+      - name: Get GitHub App User ID
+        id: get-user-id
+        env:
+          USER_NAME: ${{ steps.app-token.outputs.app-slug }}
+        run: echo "user-id=$(gh api "/users/${USER_NAME}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
+
+      - name: Configration for git
+        env:
+          USER_ID: ${{ steps.get-user-id.outputs.user-id }}
+          USER_NAME: ${{ steps.app-token.outputs.app-slug }}
+        run: |
+          git config --global user.name "${USER_NAME}[bot]"
+          git config --global user.email "${USER_ID}+${USER_NAME}[bot]@users.noreply.github.com>"
+
+      - name: Checkout
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ env.GH_TOKEN }}
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4.0.0
+
+      - name: Setup node (20.x)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: format
+        run: pnpm run format
+
+      - name: lint
+        run: pnpm run lint
+
+      - name: Check if there are any changes
+        id: check-changes-fomat-lint
+        run: |
+          git add -N .
+          if git diff --exit-code --quiet; then
+            echo "No changes detected."
+            RESULT="${VAR_NAME_FOR_CHANGED}=0"
+          else
+            echo "Changes detected."
+            git add .
+            git commit -F-<<EOF
+            style: format and lint source codes
+
+            [AUTO] this commit is created by github actions automatialy.
+          EOF
+            RESULT="${VAR_NAME_FOR_CHANGED}=1"
+          fi
+          echo "${RESULT}">>"${GITHUB_OUTPUT}"
+          echo "${RESULT}"
+
+      - name: update package.json
+        env:
+          APP_VERSION: ${{ needs.get-version.outputs.app-version }}
+        run: |
+          test -z "${APP_VERSION}" && exit 0
+          echo "Try to update package.json"
+          echo "-- before"
+          cat package.json|grep version
+
+          sed -i -e "s/\(\"version\": \"\).*\(\"\)/\1${APP_VERSION}\2/" package.json
+
+          echo "-- after"
+          cat package.json|grep version
+
+      - name: Check if there are any changes
+        id: check-changes-package-json
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          IS_CHANGED: ${{ steps.check-changes-fomat-lint.outputs.done-change }}
+        run: |
+          git add -N .
+          OLD_VALUE="${IS_CHANGED}"
+          if git diff --exit-code --quiet; then
+            echo "No changes detected."
+            RESULT="${VAR_NAME_FOR_CHANGED}=${OLD_VALUE}"
+          else
+            echo "Changes detected."
+            git add .
+            git commit -F-<<EOF
+            chore: update version of package.json
+
+            [AUTO] this commit is created by github actions automatialy.
+          EOF
+            RESULT="${VAR_NAME_FOR_CHANGED}=1"
+          fi
+          echo "${RESULT}">>"${GITHUB_OUTPUT}"
+          echo "${RESULT}"
+
+      - name: push
+        if: ${{ steps.check-changes-package-json.outputs.done-change > 0 }}
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: git push
+
+      - name: Set the output
+        id: result
+        env:
+          IS_UPDATED: "${{ steps.check-changes-package-json.outputs.done-change }}"
+        run: |
+          RESULT="is-updated=${IS_UPDATED}"
+          echo "${RESULT}">>"${GITHUB_OUTPUT}"
+          echo "${RESULT}"
+
+  lint-pr:
+    name: Validate PR title
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: amannn/action-semantic-pull-request@v5
+        id: lint_pr_title
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: marocchino/sticky-pull-request-comment@v2
+        # When the previous steps fails, the workflow would stop. By adding this
+        # condition you can continue the execution with the populated error message.
+        if: always() && (steps.lint_pr_title.outputs.error_message != null)
+        with:
+          header: pr-title-lint-error
+          message: |
+            Hey there and thank you for opening this pull request! 👋🏼
+
+            We require pull request titles to follow the [Conventional Commits specification](https://www.conventionalcommits.org/en/v1.0.0/) and it looks like your proposed title needs to be adjusted.
+
+            Details:
+
+            ```
+            ${{ steps.lint_pr_title.outputs.error_message }}
+            ```
+
+      # Delete a previous comment when the issue has been resolved
+      - if: ${{ steps.lint_pr_title.outputs.error_message == null }}
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: pr-title-lint-error
+          delete: true

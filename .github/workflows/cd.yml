@@ -1,0 +1,98 @@
+name: CD
+run-name: "CD for PR: #${{github.event.pull_request.number}} ${{ github.event.pull_request.title }}"
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+
+concurrency:
+  group: cd-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GH_EMAIL: "41898282+github-actions[bot]@users.noreply.github.com"
+  GH_USER: "github-actions[bot]"
+
+jobs:
+  check-release:
+    name: Check release
+    if: ${{ startsWith(github.head_ref, 'release/') &&  github.event.pull_request.merged == true }}
+    runs-on: ubuntu-latest
+    outputs:
+      is_release: ${{ steps.check.outputs.is_release }}
+    steps:
+      - name: check
+        id: check
+        run: |
+          SOURCE="${{ github.head_ref }}"
+          TARGET="${{ github.base_ref }}"
+          VAR_NAME="is_release"
+          if  [[ ${SOURCE} == release/* ]] && [[ ${TARGET} == "main" ]]; then
+            RESULT="${VAR_NAME}=1"
+          else
+            RESULT="${VAR_NAME}=0"
+          fi
+            echo "${RESULT}"
+            echo "${RESULT}" >>"${GITHUB_OUTPUT}"
+
+  test:
+    needs:
+      - check-release
+    if: ${{ needs.check-release.outputs.is_release > 0 }}
+    uses: ./.github/workflows/test.yml
+
+  get-version:
+    name: get version
+    needs:
+      - check-release
+    if: ${{ startsWith(github.head_ref, 'release/') && (needs.check-release.outputs.is_release > 0)}}
+    uses: ./.github/workflows/version.yml
+
+  tag:
+    name: Add the tag for the released version
+    needs:
+      - test
+      - check-release
+      - get-version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          # required
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
+      - name: Get GitHub App User ID
+        id: get-user-id
+        env:
+          USER_NAME: ${{ steps.app-token.outputs.app-slug }}
+        run: echo "user-id=$(gh api "/users/${USER_NAME}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
+
+      - name: Configration for git
+        env:
+          USER_ID: ${{ steps.get-user-id.outputs.user-id }}
+          USER_NAME: ${{ steps.app-token.outputs.app-slug }}
+        run: |
+          git config --global user.name "${USER_NAME}[bot]"
+          git config --global user.email "${USER_ID}+${USER_NAME}[bot]@users.noreply.github.com>"
+
+      - name: Checkout
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        uses: actions/checkout@v4
+        with:
+          token: ${{ env.GH_TOKEN }}
+
+      - name: Add the release tag
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          APP_VERSION_TEXT: ${{ needs.get-version.outputs.app-version-text }}
+        run: |
+          echo "Create tag: ${APP_VERSION_TEXT}"
+          git tag "${APP_VERSION_TEXT}"
+          git push origin "${APP_VERSION_TEXT}"

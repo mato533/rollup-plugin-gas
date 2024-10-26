@@ -1,0 +1,45 @@
+name: Run Test
+run-name: "TEST@${{github.ref_name}}"
+on:
+  workflow_call:
+
+  push:
+    branches:
+      - main
+    paths:
+      - "*"
+      - src/**
+      - "!**.md"
+
+concurrency:
+  group: test-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test & build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4.0.0
+
+      - name: Setup node (20.x)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Type check
+        run: pnpm run typecheck
+
+      - name: Run the test
+        run: pnpm run test
+
+      - name: Build
+        run: pnpm run build
