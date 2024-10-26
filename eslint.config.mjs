@@ -22,7 +22,6 @@ export default tseslint.config(
           disallowTypeAnnotations: false,
         },
       ],
-      "unicorn/prefer-node-protocol": "error",
       "import/no-duplicates": "error",
       "import/order": [
         "error",

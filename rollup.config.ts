@@ -1,5 +1,5 @@
-import { builtinModules } from "node:module";
-import { readFileSync } from "node:fs";
+import { builtinModules } from "module";
+import { readFileSync } from "fs";
 
 import typescript from "@rollup/plugin-typescript";
 import copy from "rollup-plugin-copy";

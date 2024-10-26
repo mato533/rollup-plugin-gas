@@ -1,4 +1,4 @@
-import { basename } from "node:path";
+import { basename } from "path";
 
 import pc from "picocolors";
 import { createFilter } from "rollup-pluginutils";
