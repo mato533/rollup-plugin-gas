@@ -1,0 +1,63 @@
+name: CI
+run-name: "CI for PR: #${{github.event.pull_request.number}} ${{ github.event.pull_request.title }}"
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - reopened
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GH_EMAIL: "41898282+github-actions[bot]@users.noreply.github.com"
+  GH_USER: "github-actions[bot]"
+
+jobs:
+  is-skip-pre-test:
+    name: Check latest commit message
+    uses: ./.github/workflows/skip-check.yml
+
+  pre-test:
+    name: Run tasks before tests
+    needs:
+      - is-skip-pre-test
+    if: ${{ needs.is-skip-pre-test.outputs.is-skip == 0 }}
+    uses: ./.github/workflows/check_pr.yml
+    secrets:
+      private-key: ${{ secrets.PRIVATE_KEY }}
+
+  judge-run-test:
+    name: judgement to run test or not
+    needs:
+      - is-skip-pre-test
+      - pre-test
+    if: ${{ !cancelled() && !failure() }}
+    runs-on: ubuntu-latest
+    outputs:
+      skip-test: ${{ steps.result.outputs.is-skip }}
+    steps:
+      - name: Judge
+        id: result
+        env:
+          IS_UPDATED: ${{ needs.pre-test.outputs.is-updated }}
+        run: |
+          # if is-update is null, must not be updated, test must be done. so set 0
+          # if is-update is not null, there are 2 pattern.
+          #   when 1 returned becouse some code was updated, then test must not be done
+          #   when 0 returned , then test must be done
+          IS_UPDATED_RESULT=$(test -z "${IS_UPDATED}" && echo 0 || echo "${IS_UPDATED}")
+          RESULT="is-skip=${IS_UPDATED_RESULT}"
+          echo "${RESULT}">>"${GITHUB_OUTPUT}"
+          echo "${RESULT}"
+
+  test:
+    name: Run CI
+    needs:
+      - judge-run-test
+    if: ${{ !cancelled() && !failure() && needs.judge-run-test.outputs.skip-test == 0 }}
+    uses: ./.github/workflows/test.yml

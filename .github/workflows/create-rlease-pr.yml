@@ -1,0 +1,140 @@
+name: Bump Version
+
+on:
+  workflow_dispatch:
+    inputs:
+      version-type:
+        description: "Select version type"
+        required: true
+        default: "patch"
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GH_EMAIL: "41898282+github-actions[bot]@users.noreply.github.com"
+  GH_USER: "github-actions[bot]"
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/main' }}
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      VERSION_TYPE: ${{ github.event.inputs.version-type }}
+    steps:
+      - run: |
+          git config --global user.name "${GH_USER}"
+          git config --global user.email "${GH_EMAIL}"
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4.0.0
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Display selected version type
+        run: echo "Selected version type-> ${VERSION_TYPE}"
+
+      # You can add your own logic here based on the selected version type
+      - name: Bump version based on input
+        run: |
+          case "${VERSION_TYPE}" in
+            major)
+              echo "Bumping major version"
+              pnpm version major --no-commit-hooks --no-git-tag-version
+              ;;
+            minor)
+              echo "Bumping minor version"
+              pnpm version minor --no-commit-hooks --no-git-tag-version
+              ;;
+            patch)
+              echo "Bumping patch version"
+              pnpm version patch --no-commit-hooks --no-git-tag-version
+              ;;
+          esac
+
+      - name: Parse package.json
+        id: identify-version
+        run: |
+          APP_VERSION="$(cat ./package.json |jq .version|sed -e 's/"//g'| head -n1)"
+          if [ ! -n "${APP_VERSION}" ]; then
+            exit 255
+          fi
+          echo "Detected the version: ${APP_VERSION}"
+          echo "app-version=${APP_VERSION}" >>"${GITHUB_OUTPUT}"
+          echo "app-version-text=v${APP_VERSION}" >>"${GITHUB_OUTPUT}"
+
+      - name: Check if there are any changes
+        run: |
+          git add -N .
+          if git diff --exit-code --quiet; then
+            echo "No changes detected."
+            echo "ERROR: could not update the package.json"
+            exit 1
+          else
+            echo "Changes detected."
+          fi
+
+      - name: Checkout new repository
+        id: create-repository
+        env:
+          APP_VERSION: ${{steps.identify-version.outputs.app-version}}
+          APP_VERSION_TEXT: ${{steps.identify-version.outputs.app-version-text}}
+        run: |
+          BRANCH_NAME="release/${APP_VERSION_TEXT}"
+          git checkout -b "${BRANCH_NAME}"
+          echo "branch-name=${BRANCH_NAME}" >>"${GITHUB_OUTPUT}"
+
+      - name: Update the changelog
+        env:
+          APP_VERSION: ${{steps.identify-version.outputs.app-version}}
+          APP_VERSION_TEXT: ${{steps.identify-version.outputs.app-version-text}}
+        run: |
+          pnpm run changelog --tag "${APP_VERSION_TEXT}"
+          pnpm exec prettier --write CHANGELOG.md
+          git add CHANGELOG.md
+          git commit -F-<<EOF
+          chore: update the CHANGELOG.md for ${APP_VERSION_TEXT}
+
+          [AUTO] this commit is created by github actions automatialy.
+          EOF
+
+      - name: Commit package.json
+        env:
+          APP_VERSION: ${{steps.identify-version.outputs.app-version}}
+          APP_VERSION_TEXT: ${{steps.identify-version.outputs.app-version-text}}
+        run: |
+          git add package.json
+          git commit -F-<<EOF
+          chore: update version of package.json for ${APP_VERSION_TEXT}
+
+          [AUTO] this commit is created by github actions automatialy.
+          EOF
+      - name: Push commits
+        env:
+          BRANCH_NAME: ${{ steps.create-repository.outputs.branch-name }}
+        run: |
+          git push -u origin "${BRANCH_NAME}"
+
+      - name: Create pull request
+        env:
+          APP_VERSION_TEXT: ${{steps.identify-version.outputs.app-version-text}}
+        run: |
+          gh pr create --title "chore(release): ${APP_VERSION_TEXT}" --body "**Preparations for ${APP_VERSION_TEXT}**"
