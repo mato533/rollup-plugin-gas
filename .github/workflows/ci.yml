@@ -19,11 +19,11 @@ env:
 
 jobs:
   is-skip-pre-test:
-    name: Check latest commit message
+    name: PRE-CHECK
     uses: ./.github/workflows/skip-check.yml
 
   pre-test:
-    name: Run tasks before tests
+    name: CHECK
     needs:
       - is-skip-pre-test
     if: ${{ needs.is-skip-pre-test.outputs.is-skip == 0 }}
@@ -32,7 +32,7 @@ jobs:
       private-key: ${{ secrets.PRIVATE_KEY }}
 
   judge-run-test:
-    name: judgement to run test or not
+    name: CHECK (Skip or Execute CI)
     needs:
       - is-skip-pre-test
       - pre-test
@@ -56,7 +56,7 @@ jobs:
           echo "${RESULT}"
 
   test:
-    name: Run CI
+    name: CI
     needs:
       - judge-run-test
     if: ${{ !cancelled() && !failure() && needs.judge-run-test.outputs.skip-test == 0 }}
