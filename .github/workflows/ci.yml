@@ -18,46 +18,73 @@ env:
   GH_USER: "github-actions[bot]"
 
 jobs:
-  is-skip-pre-test:
-    name: Check latest commit message
-    uses: ./.github/workflows/skip-check.yml
+  lint-pr-title:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: amannn/action-semantic-pull-request@v5
+        id: lint_pr_title
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  pre-test:
-    name: Run tasks before tests
-    needs:
-      - is-skip-pre-test
-    if: ${{ needs.is-skip-pre-test.outputs.is-skip == 0 }}
-    uses: ./.github/workflows/check_pr.yml
-    secrets:
-      private-key: ${{ secrets.PRIVATE_KEY }}
+      - uses: marocchino/sticky-pull-request-comment@v2
+        # When the previous steps fails, the workflow would stop. By adding this
+        # condition you can continue the execution with the populated error message.
+        if: always() && (steps.lint_pr_title.outputs.error_message != null)
+        with:
+          header: pr-title-lint-error
+          message: |
+            Hey there and thank you for opening this pull request! 👋🏼
 
-  judge-run-test:
-    name: judgement to run test or not
-    needs:
-      - is-skip-pre-test
-      - pre-test
-    if: ${{ !cancelled() && !failure() }}
+            We require pull request titles to follow the [Conventional Commits specification](https://www.conventionalcommits.org/en/v1.0.0/) and it looks like your proposed title needs to be adjusted.
+
+            Details:
+
+            ```
+            ${{ steps.lint_pr_title.outputs.error_message }}
+            ```
+
+      # Delete a previous comment when the issue has been resolved
+      - if: ${{ steps.lint_pr_title.outputs.error_message == null }}
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: pr-title-lint-error
+          delete: true
+
+  pre-check:
     runs-on: ubuntu-latest
     outputs:
-      skip-test: ${{ steps.result.outputs.is-skip }}
+      is-skip: ${{ steps.pre-check.outputs.is-skip }}
     steps:
-      - name: Judge
-        id: result
-        env:
-          IS_UPDATED: ${{ needs.pre-test.outputs.is-updated }}
-        run: |
-          # if is-update is null, must not be updated, test must be done. so set 0
-          # if is-update is not null, there are 2 pattern.
-          #   when 1 returned becouse some code was updated, then test must not be done
-          #   when 0 returned , then test must be done
-          IS_UPDATED_RESULT=$(test -z "${IS_UPDATED}" && echo 0 || echo "${IS_UPDATED}")
-          RESULT="is-skip=${IS_UPDATED_RESULT}"
-          echo "${RESULT}">>"${GITHUB_OUTPUT}"
-          echo "${RESULT}"
+      - id: pre-check
+        uses: mato533/cicd-actions/pre-check@main
+        with:
+          target-sha: ${{ github.event.pull_request.head.sha }}
+
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      is-updated: ${{ steps.check.outputs.is-updated }}
+    needs:
+      - pre-check
+      - lint-pr-title
+    if: ${{ needs.pre-check.outputs.is-skip == 0 }}
+    steps:
+      - uses: mato533/cicd-actions/setup-pnpm@main
+        with:
+          cache: "pnpm"
+
+      - uses: mato533/cicd-actions/format-source-code@main
+        id: check
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+          branch: ${{ github.head_ref }}
 
   test:
-    name: Run CI
     needs:
-      - judge-run-test
-    if: ${{ !cancelled() && !failure() && needs.judge-run-test.outputs.skip-test == 0 }}
+      - pre-check
+      - check
+    if: ${{  !cancelled() && !failure() && (needs.pre-check.outputs.is-skip > 0 || needs.check.outputs.is-updated == 0) }}
     uses: ./.github/workflows/test.yml

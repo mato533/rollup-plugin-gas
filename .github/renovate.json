@@ -15,22 +15,6 @@
   "platformAutomerge": true,
   "packageRules": [
     {
-      "packagePatterns": ["eslint", "prettier"],
-      "groupName": "lint & format"
-    },
-    {
-      "packagePatterns": ["rollup"],
-      "groupName": "rollup"
-    },
-    {
-      "packagePatterns": ["ts-node", "^typescript"],
-      "groupName": "typescript"
-    },
-    {
-      "packagePatterns": ["^@types/"],
-      "groupName": "types"
-    },
-    {
       "enabled": false,
       "matchDepTypes": ["peerDependencies"]
     }

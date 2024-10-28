@@ -14,7 +14,6 @@ on:
           - patch
 
 env:
-  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   GH_EMAIL: "41898282+github-actions[bot]@users.noreply.github.com"
   GH_USER: "github-actions[bot]"
 
@@ -28,26 +27,23 @@ jobs:
     env:
       VERSION_TYPE: ${{ github.event.inputs.version-type }}
     steps:
+      - uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ vars.APP_ID }}
+          owner: ${{ github.repository_owner }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+
       - run: |
           git config --global user.name "${GH_USER}"
           git config --global user.email "${GH_EMAIL}"
 
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: mato533/cicd-actions/setup-pnpm@main
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         with:
           fetch-depth: 0
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4.0.0
-
-      - name: Setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20.x"
           cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install
 
       - name: Display selected version type
         run: echo "Selected version type-> ${VERSION_TYPE}"
@@ -130,11 +126,13 @@ jobs:
       - name: Push commits
         env:
           BRANCH_NAME: ${{ steps.create-repository.outputs.branch-name }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           git push -u origin "${BRANCH_NAME}"
 
       - name: Create pull request
         env:
           APP_VERSION_TEXT: ${{steps.identify-version.outputs.app-version-text}}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           gh pr create --title "chore(release): ${APP_VERSION_TEXT}" --body "**Preparations for ${APP_VERSION_TEXT}**"
