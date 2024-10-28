@@ -18,8 +18,7 @@ env:
   GH_USER: "github-actions[bot]"
 
 jobs:
-  lint-pr:
-    name: Validate PR title
+  lint-pr-title:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
@@ -69,23 +68,12 @@ jobs:
       is-updated: ${{ steps.check.outputs.is-updated }}
     needs:
       - pre-check
-      - lint-pr
+      - lint-pr-title
     if: ${{ needs.pre-check.outputs.is-skip == 0 }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4.0.0
-
-      - name: Setup node (20.x)
-        uses: actions/setup-node@v4
+      - uses: mato533/cicd-actions/setup-pnpm@main
         with:
-          node-version: 20
           cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install
 
       - uses: mato533/cicd-actions/format-source-code@main
         id: check
@@ -99,5 +87,4 @@ jobs:
       - pre-check
       - check
     if: ${{  !cancelled() && !failure() && (needs.pre-check.outputs.is-skip > 0 || needs.check.outputs.is-updated == 0) }}
-    name: Run CI
     uses: ./.github/workflows/test.yml

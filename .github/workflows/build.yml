@@ -18,21 +18,10 @@ jobs:
       contents: read
       id-token: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4.0.0
-
-      - name: Setup node (20.x)
-        uses: actions/setup-node@v4
+      - uses: mato533/cicd-actions/setup-pnpm@main
         with:
-          node-version: 20
           cache: "pnpm"
           registry-url: "https://registry.npmjs.org"
-
-      - name: Install dependencies
-        run: pnpm install
 
       - name: Build
         run: pnpm run build
@@ -48,20 +37,9 @@ jobs:
       - build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4.0.0
-
-      - name: Setup node
-        uses: actions/setup-node@v4
+      - uses: mato533/cicd-actions/setup-pnpm@main
         with:
-          node-version: 20
           cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install
 
       - name: Run the coverage
         run: pnpm run coverage
@@ -78,22 +56,10 @@ jobs:
     name: Create Release
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: mato533/cicd-actions/setup-pnpm@main
         with:
           fetch-depth: 0
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4.0.0
-
-      - name: Setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
           cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install
 
       - name: Generate changelog
         env:
