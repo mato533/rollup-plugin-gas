@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.2] - 2024-10-28
+
+### ⚙️ Miscellaneous Tasks
+
+- Update workflow and renovate config ([#301](https://github.com/mato533/rollup-plugin-gas/issues/301))
+
 ## [2.0.1] - 2024-10-26
 
 ### 🚀 Features
@@ -20,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Update yaml configrations for ci/cd ([#295](https://github.com/mato533/rollup-plugin-gas/issues/295))
 - Update ci/cd workflows ([#298](https://github.com/mato533/rollup-plugin-gas/issues/298))
 - Update config related workflow ([#299](https://github.com/mato533/rollup-plugin-gas/issues/299))
+- _(release)_ V2.0.1 ([#300](https://github.com/mato533/rollup-plugin-gas/issues/300))
 
 ### Release
 
