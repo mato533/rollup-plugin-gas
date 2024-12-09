@@ -55,7 +55,8 @@ jobs:
   pre-check:
     runs-on: ubuntu-latest
     outputs:
-      is-skip: ${{ steps.pre-check.outputs.is-skip }}
+      is-skip-check: ${{ steps.pre-check.outputs.is-skip }}
+      is-skip-test: ${{ steps.pre-check.outputs.is-skip-test }}
     steps:
       - id: pre-check
         uses: mato533/cicd-actions/pre-check@main
@@ -69,7 +70,7 @@ jobs:
     needs:
       - pre-check
       - lint-pr-title
-    if: ${{ needs.pre-check.outputs.is-skip == 0 }}
+    if: ${{ needs.pre-check.outputs.is-skip-check == 0 }}
     steps:
       - uses: mato533/cicd-actions/setup-pnpm@main
         with:
@@ -86,5 +87,26 @@ jobs:
     needs:
       - pre-check
       - check
-    if: ${{  !cancelled() && !failure() && (needs.pre-check.outputs.is-skip > 0 || needs.check.outputs.is-updated == 0) }}
+    if: ${{ !cancelled() && !failure() && (needs.pre-check.outputs.is-skip-check > 0 || needs.check.outputs.is-updated == 0) && needs.pre-check.outputs.is-skip-test == 0 }}
+    name: Run CI
     uses: ./.github/workflows/test.yml
+
+  result:
+    runs-on: ubuntu-latest
+    needs:
+      - pre-check
+      - check
+      - test
+    if: ${{ !cancelled() && (needs.pre-check.outputs.is-skip-check > 0 || needs.check.outputs.is-updated == 0) }}
+    steps:
+      - uses: technote-space/workflow-conclusion-action@v3
+      - name: Conclusion
+        env:
+          WORKFLOW_CONCLUSION: ${{ env.WORKFLOW_CONCLUSION }}
+        run: |
+          echo ${WORKFLOW_CONCLUSION}
+          if [ ${WORKFLOW_CONCLUSION} =  "failure" ]; then
+            exit 1
+          else
+            exit 0
+          fi
