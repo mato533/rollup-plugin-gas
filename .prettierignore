@@ -2,3 +2,4 @@ tests/fixtures/**/*.bundle.js
 dist
 .vscode
 coverage
+pnpm-lock.yaml
