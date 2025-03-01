@@ -21,7 +21,7 @@
     "coverage:ui": "vitest run --coverage && vite preview --outDir ./coverage",
     "coverage": "vitest run --coverage"
   },
-  "packageManager": "pnpm@10.4.1",
+  "packageManager": "pnpm@10.5.2",
   "simple-git-hooks": {
     "pre-commit": "pnpx lint-staged --concurrent false"
   },
@@ -65,23 +65,23 @@
     "@eslint/js": "^9.21.0",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-typescript": "^12.1.2",
-    "@types/node": "^22.13.5",
-    "@vitest/coverage-v8": "^3.0.6",
+    "@types/node": "^22.13.8",
+    "@vitest/coverage-v8": "^3.0.7",
     "eslint": "^9.21.0",
-    "eslint-config-prettier": "^10.0.1",
+    "eslint-config-prettier": "^10.0.2",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-unicorn": "^57.0.0",
     "git-cliff": "^2.8.0",
     "lint-staged": "^15.4.3",
     "prettier": "^3.5.2",
-    "rollup": "^4.34.8",
+    "rollup": "^4.34.9",
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-delete": "^3.0.0",
     "simple-git-hooks": "^2.11.1",
     "tslib": "^2.8.1",
-    "typescript": "5.7.3",
-    "typescript-eslint": "^8.24.1",
-    "vitest": "^3.0.6"
+    "typescript": "5.8.2",
+    "typescript-eslint": "^8.25.0",
+    "vitest": "^3.0.7"
   },
   "dependencies": {
     "gas-entry-generator": "^2.6.0",
