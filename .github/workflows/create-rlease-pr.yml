@@ -27,7 +27,7 @@ jobs:
     env:
       VERSION_TYPE: ${{ github.event.inputs.version-type }}
     steps:
-      - uses: actions/create-github-app-token@v1
+      - uses: actions/create-github-app-token@v2
         id: app-token
         with:
           app-id: ${{ vars.APP_ID }}
