@@ -55,7 +55,7 @@ jobs:
       app-version-text: ${{ steps.identify-version.outputs.app-version-text }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Parse package.json
         id: identify-version
@@ -92,7 +92,7 @@ jobs:
       - name: Checkout
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           token: ${{ env.GH_TOKEN }}
 
