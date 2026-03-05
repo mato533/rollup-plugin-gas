@@ -84,7 +84,7 @@
     "vitest": "^3.2.3"
   },
   "dependencies": {
-    "gas-entry-generator": "^2.6.0",
+    "gas-entry-generator": "^3.0.0",
     "picocolors": "^1.1.1",
     "rollup-pluginutils": "^2.8.2"
   },
